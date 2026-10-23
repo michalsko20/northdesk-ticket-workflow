@@ -1,3 +1,4 @@
+import asyncio
 import uuid
 from dataclasses import asdict
 from datetime import timedelta
@@ -19,7 +20,15 @@ REPLY = Decision("account", "normal", "reply", message="Reset password", article
 
 
 class FakeActivities:
-    def __init__(self, decision=REPLY, fail_action=0, fail_decide=0, permanent=False):
+    def __init__(
+        self,
+        decision=REPLY,
+        fail_action=0,
+        fail_decide=0,
+        permanent=False,
+        decide_gate=None,
+        action_gate=None,
+    ):
         self.decision = decision
         self.fail_action = fail_action
         self.fail_decide = fail_decide
@@ -27,10 +36,14 @@ class FakeActivities:
         self.decide_attempts = 0
         self.action_attempts = 0
         self.requests = []
+        self.decide_gate = decide_gate
+        self.action_gate = action_gate
 
     @activity.defn(name="decide_ticket")
     async def decide(self, ticket: Ticket) -> dict:
         self.decide_attempts += 1
+        if self.decide_gate is not None:
+            await self.decide_gate.wait()
         if self.decide_attempts <= self.fail_decide:
             raise ApplicationError("model error", type="ModelError", non_retryable=self.permanent)
         return asdict(self.decision)
@@ -49,6 +62,8 @@ class FakeActivities:
     async def act(self, request: ActionInput) -> dict:
         self.action_attempts += 1
         self.requests.append(request)
+        if self.action_gate is not None:
+            await self.action_gate.wait()
         if self.action_attempts <= self.fail_action:
             raise ApplicationError("temporary failure", type="HelpdeskError")
         return {"action": request.decision.action}
@@ -78,8 +93,6 @@ async def start(env, worker):
 
 
 async def awaiting(handle):
-    import asyncio
-
     for _ in range(200):
         state = await handle.query(TicketWorkflow.status)
         if state.step == "awaiting_approval":
@@ -199,3 +212,34 @@ async def test_restart_worker_preserves_pending_refund(temporal_env, worker_for)
         await handle.execute_update(TicketWorkflow.approve, Approval(True, "reviewer"))
         assert (await handle.result()).result["action"] == "refund"
         assert activities.decide_attempts == 1
+
+
+async def test_approval_cannot_be_submitted_before_decision(temporal_env, worker_for):
+    gate = asyncio.Event()
+    activities = FakeActivities(REFUND, decide_gate=gate)
+    async with worker_for(activities) as worker:
+        handle = await start(temporal_env, worker)
+        assert (await handle.query(TicketWorkflow.status)).step == "deciding"
+        with pytest.raises(WorkflowUpdateFailedError):
+            await handle.execute_update(TicketWorkflow.approve, Approval(True, "operator"))
+        assert (await handle.query(TicketWorkflow.status)).approval is None
+        gate.set()
+        await awaiting(handle)
+        await handle.execute_update(TicketWorkflow.approve, Approval(False, "operator"))
+        assert (await handle.result()).decision.reason == "approval_rejected"
+
+
+async def test_first_approval_wins_and_identical_repeat_is_harmless(temporal_env, worker_for):
+    gate = asyncio.Event()
+    activities = FakeActivities(REFUND, action_gate=gate)
+    approval = Approval(True, "operator")
+    async with worker_for(activities) as worker:
+        handle = await start(temporal_env, worker)
+        await awaiting(handle)
+        assert await handle.execute_update(TicketWorkflow.approve, approval) == approval
+        assert await handle.execute_update(TicketWorkflow.approve, approval) == approval
+        with pytest.raises(WorkflowUpdateFailedError):
+            await handle.execute_update(TicketWorkflow.approve, Approval(False, "other-operator"))
+        gate.set()
+        assert (await handle.result()).result["action"] == "refund"
+        assert activities.action_attempts == 1
