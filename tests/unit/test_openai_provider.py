@@ -94,6 +94,7 @@ async def test_real_sdk_round_trip_keeps_tool_call_and_returns_its_result():
 @pytest.mark.parametrize(
     "status,error",
     [
+        (408, TransientAgentError),
         (429, TransientAgentError),
         (500, TransientAgentError),
         (401, PermanentAgentError),
