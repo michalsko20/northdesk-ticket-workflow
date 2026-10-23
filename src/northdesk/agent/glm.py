@@ -36,8 +36,10 @@ class GLMProvider(OpenAIProvider):
             {
                 "role": "system",
                 "content": SYSTEM_PROMPT
-                + "\nReturn the final decision as JSON matching this schema: "
-                + json.dumps(decision_schema()),
+                + "\nInvoke actual function tools to retrieve facts; never emit logging objects or "
+                "describe planned tool calls as JSON text. Get customer details and relevant "
+                "KB/invoice facts. Finish by calling submit_decision alone with the proposed "
+                "decision. Do not combine submit_decision with other tool calls.",
             }
         ]
         for message in messages:
@@ -61,13 +63,24 @@ class GLMProvider(OpenAIProvider):
             }
             for tool in tools
         ]
+        chat_tools.append(
+            {
+                "type": "function",
+                "function": {
+                    "name": "submit_decision",
+                    "description": "Return the final proposed decision. "
+                    "This does not execute an action. Code validates it; "
+                    "refunds need human approval.",
+                    "parameters": decision_schema(),
+                },
+            }
+        )
         try:
             response = await self.client.chat.completions.create(
                 model=self.model,
                 messages=cast(Any, chat_messages),
                 tools=cast(Any, chat_tools),
                 tool_choice="auto",
-                response_format={"type": "json_object"},
                 max_tokens=4096,
                 extra_body={"reasoning_effort": "low"},
             )
@@ -89,6 +102,14 @@ class GLMProvider(OpenAIProvider):
                 raise PermanentAgentError("glm_unknown_tool_type")
             calls.append(ToolCall(call.id, call.function.name, call.function.arguments))
         output = [{"type": "glm_assistant", "message": message_data}]
+        final_calls = [call for call in calls if call.name == "submit_decision"]
+        if final_calls:
+            if len(calls) != 1:
+                raise MalformedResponse("glm_mixed_decision_and_tools")
+            try:
+                return Turn(decision=json.loads(final_calls[0].arguments), output=output)
+            except json.JSONDecodeError:
+                raise MalformedResponse("glm_unreadable_decision") from None
         if calls:
             return Turn(calls=calls, output=output)
         try:

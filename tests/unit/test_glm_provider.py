@@ -44,7 +44,8 @@ async def test_glm_protocol_preserves_tool_ids_and_reasoning_between_rounds():
         assert str(request.url) == "https://api.z.ai/api/paas/v4/chat/completions"
         payload = json.loads(request.content)
         requests.append(payload)
-        assert payload["response_format"] == {"type": "json_object"}
+        assert "response_format" not in payload
+        assert payload["tools"][-1]["function"]["name"] == "submit_decision"
         assert payload["reasoning_effort"] == "low"
         assert payload["tools"][0]["function"]["name"] == "get_customer"
         if len(requests) == 1:
@@ -80,10 +81,20 @@ async def test_glm_protocol_preserves_tool_ids_and_reasoning_between_rounds():
             json=completion(
                 {
                     "role": "assistant",
-                    "content": json.dumps(
-                        asdict(Decision("other", "low", "close", reason="Out of scope"))
-                    ),
-                }
+                    "tool_calls": [
+                        {
+                            "id": "final",
+                            "type": "function",
+                            "function": {
+                                "name": "submit_decision",
+                                "arguments": json.dumps(
+                                    asdict(Decision("other", "low", "close", reason="Out of scope"))
+                                ),
+                            },
+                        }
+                    ],
+                },
+                "tool_calls",
             ),
         )
 
