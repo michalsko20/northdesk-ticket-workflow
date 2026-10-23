@@ -1,0 +1,20 @@
+# Merge with docker-compose.yml using project northdesk-e2e (Compose >= 2.24.4).
+x-e2e-env: &e2e-env
+  LLM_MODE: fake
+  OPENAI_API_KEY: ""
+  ZAI_API_KEY: ""
+  HELPDESK_FAILURE_RATE: "0"
+
+services:
+  temporal:
+    ports: !override
+      - "127.0.0.1:7234:7233"
+      - "127.0.0.1:8234:8233"
+  api:
+    image: northdesk:e2e
+    ports: !override
+      - "127.0.0.1:8001:8000"
+    environment: *e2e-env
+  worker:
+    image: northdesk:e2e
+    environment: *e2e-env

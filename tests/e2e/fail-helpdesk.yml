@@ -1,0 +1,5 @@
+# Add after compose.yml to force deterministic Helpdesk delivery exhaustion.
+services:
+  worker:
+    environment:
+      HELPDESK_FAILURE_RATE: "1"

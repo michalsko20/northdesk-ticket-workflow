@@ -1,0 +1,57 @@
+[
+  {
+    "ticket_id": "pw-T1-mvl6klqk",
+    "expected": "reply",
+    "receiptCount": 1
+  },
+  {
+    "ticket_id": "pw-T2-mvl6klqk",
+    "expected": "refund",
+    "receiptCount": 1
+  },
+  {
+    "ticket_id": "pw-T3-mvl6klqk",
+    "expected": "escalate",
+    "receiptCount": 1
+  },
+  {
+    "ticket_id": "pw-T4-mvl6klqk",
+    "expected": "reply",
+    "receiptCount": 1
+  },
+  {
+    "ticket_id": "pw-T5-mvl6klqk",
+    "expected": "close",
+    "receiptCount": 1
+  },
+  {
+    "ticket_id": "pw-T6-mvl6klqk",
+    "expected": "escalate",
+    "receiptCount": 1
+  },
+  {
+    "ticket_id": "pw-T7-mvl6klqk",
+    "expected": "escalate",
+    "receiptCount": 1
+  },
+  {
+    "ticket_id": "pw-rejected-mvl6klqk",
+    "expected": "escalate",
+    "receiptCount": 1
+  },
+  {
+    "ticket_id": "pw-lost-ack-mvl6klqk",
+    "expected": "refund",
+    "receiptCount": 1
+  },
+  {
+    "ticket_id": "pw-restart-mvl6klqk",
+    "expected": "refund",
+    "receiptCount": 1
+  },
+  {
+    "ticket_id": "pw-delivery-failed-mvl6mwzl",
+    "expected": null,
+    "receiptCount": 0
+  }
+]
