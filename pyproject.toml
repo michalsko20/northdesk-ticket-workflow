@@ -12,7 +12,7 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["pytest>=9,<10", "pytest-asyncio>=1.4,<2", "httpx>=0.28,<1", "ruff>=0.15,<1"]
+dev = ["pytest>=9,<10", "pytest-asyncio>=1.4,<2", "httpx>=0.28,<1", "ruff>=0.15,<1", "mypy>=1.19,<2"]
 
 [build-system]
 requires = ["hatchling"]
@@ -32,3 +32,11 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.12"
+files = ["src/northdesk"]
+check_untyped_defs = true
+disallow_untyped_defs = true
+warn_unused_ignores = true
+no_implicit_optional = true

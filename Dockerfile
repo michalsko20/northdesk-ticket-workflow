@@ -18,6 +18,7 @@ COPY scripts/download_test_server.py /tmp/download_test_server.py
 RUN python /tmp/download_test_server.py /opt/temporal-test-server
 COPY tests ./tests
 COPY scripts ./scripts
+COPY Makefile ./
 ENV TEMPORAL_TEST_SERVER=/opt/temporal-test-server
 USER app
-CMD ["pytest", "-q", "-p", "no:cacheprovider"]
+CMD ["sh", "scripts/check.sh"]
