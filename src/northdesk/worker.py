@@ -5,6 +5,7 @@ from datetime import timedelta
 from temporalio.worker import Worker
 
 from northdesk.activities import Activities
+from northdesk.agent.glm import GLMProvider
 from northdesk.agent.providers import FakeProvider, OpenAIProvider, Provider
 from northdesk.connection import connect
 from northdesk.logging import configure_logging
@@ -17,11 +18,15 @@ from northdesk.workflows.ticket import TicketWorkflow
 async def main() -> None:
     configure_logging()
     settings = Settings()
-    provider: Provider = (
-        FakeProvider()
-        if settings.llm_mode == "fake"
-        else OpenAIProvider(settings.openai_api_key.get_secret_value(), settings.llm_model)
-    )
+    provider: Provider
+    if settings.llm_mode == "fake":
+        provider = FakeProvider()
+    elif settings.llm_mode == "glm":
+        provider = GLMProvider(
+            settings.zai_api_key.get_secret_value(), settings.glm_model, settings.glm_base_url
+        )
+    else:
+        provider = OpenAIProvider(settings.openai_api_key.get_secret_value(), settings.llm_model)
     activities = Activities(
         provider, Catalog(), FakeHelpdesk(settings.helpdesk_db_path, settings.helpdesk_failure_rate)
     )
