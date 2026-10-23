@@ -86,6 +86,7 @@ async def test_real_sdk_round_trip_keeps_tool_call_and_returns_its_result():
         assert decision["action"] == "close"
         assert len(requests) == 2
         assert requests[0]["store"] is False
+        assert requests[0]["max_output_tokens"] == 2000
         assert requests[0]["text"]["format"]["strict"] is True
     finally:
         await provider.close()

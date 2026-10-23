@@ -1,0 +1,20 @@
+# Dedicated volumes, network and ports; do not use the demonstration project name.
+x-limits-env: &limits-env
+  LLM_MODE: fake
+  OPENAI_API_KEY: ""
+  ZAI_API_KEY: ""
+  HELPDESK_FAILURE_RATE: "0"
+
+services:
+  temporal:
+    ports: !override
+      - "127.0.0.1:7235:7233"
+      - "127.0.0.1:8235:8233"
+  api:
+    image: northdesk:limits
+    ports: !override
+      - "127.0.0.1:8002:8000"
+    environment: *limits-env
+  worker:
+    image: northdesk:limits
+    environment: *limits-env

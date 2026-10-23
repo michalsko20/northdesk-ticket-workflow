@@ -47,6 +47,7 @@ async def test_glm_protocol_preserves_tool_ids_and_reasoning_between_rounds():
         assert "response_format" not in payload
         assert payload["tools"][-1]["function"]["name"] == "submit_decision"
         assert payload["reasoning_effort"] == "low"
+        assert payload["max_tokens"] == 4096
         assert payload["tools"][0]["function"]["name"] == "get_customer"
         if len(requests) == 1:
             return httpx2.Response(
