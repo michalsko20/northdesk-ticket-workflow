@@ -179,6 +179,8 @@ The model defaults to `glm-5.3-flash`. `GLM_BASE_URL` accepts either an SDK base
 
 GLM uses [native Chat Completions function calls](https://docs.z.ai/guides/capabilities/function-calling). Its adapter converts the shared agent conversation, preserves tool-call IDs and `reasoning_content` for continuation, and obtains the final proposal through a `submit_decision` function. That function only returns data for independent validation; it never executes or approves an action. Forcing JSON-object mode alongside tools was unreliable in a live test, so the GLM adapter uses the final proposal tool instead. It rejects a batch mixing submission with read tools. Reasoning is not logged or included in ticket state.
 
+The [recorded comparison with fake mode](docs/glm-evaluation.md) describes the live results on all seven examples and the adapter correction discovered during that test.
+
 To return to the keyless default explicitly:
 
 ```bash
