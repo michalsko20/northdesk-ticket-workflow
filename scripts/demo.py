@@ -1,5 +1,7 @@
 """Exercise the seven example tickets through HTTP; only Python's stdlib is needed."""
 
+from __future__ import annotations
+
 import argparse
 import json
 import time

@@ -21,12 +21,18 @@ class JsonFormatter(logging.Formatter):
             if workflow_id:
                 entry.setdefault("workflow_id", workflow_id)
                 entry.setdefault("ticket_id", workflow_id.removeprefix("ticket/"))
+            if "attempt" in context:
+                entry.setdefault("attempt", context["attempt"])
         if record.exc_info:
             entry["exception"] = self.formatException(record.exc_info)
         return json.dumps(entry, default=str)
 
 
 def configure_logging() -> None:
+    from temporalio import activity, workflow
+
+    workflow.logger.workflow_info_on_message = False
+    activity.logger.activity_info_on_message = False
     handler = logging.StreamHandler()
     handler.setFormatter(JsonFormatter())
     logging.basicConfig(level=logging.INFO, handlers=[handler], force=True)

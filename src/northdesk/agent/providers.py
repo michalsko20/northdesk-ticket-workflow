@@ -101,7 +101,7 @@ class OpenAIProvider:
         except APIConnectionError as exc:
             raise TransientAgentError("llm_connection_error") from exc
         except APIStatusError as exc:
-            if exc.status_code == 429 or exc.status_code >= 500:
+            if exc.status_code in (408, 429) or exc.status_code >= 500:
                 raise TransientAgentError(f"llm_http_{exc.status_code}") from exc
             raise PermanentAgentError(f"llm_http_{exc.status_code}") from exc
         if response.status != "completed":
