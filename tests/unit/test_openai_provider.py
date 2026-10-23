@@ -126,3 +126,31 @@ async def test_refusal_or_invalid_json_is_bounded_by_activity_retries():
             await provider.step([], [])
     finally:
         await provider.close()
+
+
+@pytest.mark.parametrize("error", [httpx2.ConnectError, httpx2.ReadTimeout])
+async def test_transport_failures_are_retryable_without_sdk_retries(error):
+    calls = []
+
+    def handler(request):
+        calls.append(request)
+        raise error("synthetic transport failure", request=request)
+
+    provider = await provider_with_transport(handler)
+    try:
+        with pytest.raises(TransientAgentError, match="llm_connection_error"):
+            await provider.step([], [])
+        assert len(calls) == 1
+    finally:
+        await provider.close()
+
+
+@pytest.mark.parametrize("status", ["incomplete", "failed", "in_progress"])
+async def test_noncompleted_response_is_not_accepted_as_a_decision(status):
+    payload = {**response([message('{"action":"close"}')]), "status": status}
+    provider = await provider_with_transport(lambda request: httpx2.Response(200, json=payload))
+    try:
+        with pytest.raises(MalformedResponse, match="llm_incomplete_response"):
+            await provider.step([], [])
+    finally:
+        await provider.close()

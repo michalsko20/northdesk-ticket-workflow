@@ -28,6 +28,7 @@ class FakeActivities:
         permanent=False,
         decide_gate=None,
         action_gate=None,
+        fail_validate=0,
     ):
         self.decision = decision
         self.fail_action = fail_action
@@ -38,6 +39,8 @@ class FakeActivities:
         self.requests = []
         self.decide_gate = decide_gate
         self.action_gate = action_gate
+        self.fail_validate = fail_validate
+        self.validate_attempts = 0
 
     @activity.defn(name="decide_ticket")
     async def decide(self, ticket: Ticket) -> dict:
@@ -50,6 +53,11 @@ class FakeActivities:
 
     @activity.defn(name="validate_ticket")
     async def validate(self, request: ValidationInput) -> Decision:
+        self.validate_attempts += 1
+        if self.validate_attempts <= self.fail_validate:
+            raise ApplicationError(
+                "catalog unavailable", type="CatalogError", non_retryable=self.permanent
+            )
         catalog = Catalog()
         return validate_decision(
             request.ticket,
@@ -243,3 +251,66 @@ async def test_first_approval_wins_and_identical_repeat_is_harmless(temporal_env
         gate.set()
         assert (await handle.result()).result["action"] == "refund"
         assert activities.action_attempts == 1
+
+
+async def test_simultaneous_conflicting_approvals_record_one_winner(temporal_env, worker_for):
+    gate = asyncio.Event()
+    activities = FakeActivities(REFUND, action_gate=gate)
+    approvals = [Approval(bool(i % 2), f"reviewer-{i}") for i in range(32)]
+    async with worker_for(activities) as worker:
+        handle = await start(temporal_env, worker)
+        await awaiting(handle)
+        try:
+            outcomes = await asyncio.gather(
+                *(handle.execute_update(TicketWorkflow.approve, item) for item in approvals),
+                return_exceptions=True,
+            )
+            winners = [item for item in outcomes if isinstance(item, Approval)]
+            assert len(winners) == 1
+            assert all(isinstance(item, (Approval, WorkflowUpdateFailedError)) for item in outcomes)
+            assert (await handle.query(TicketWorkflow.status)).approval == winners[0]
+        finally:
+            gate.set()
+        result = await handle.result()
+        assert result.result["action"] == ("refund" if winners[0].approved else "escalate")
+        assert activities.action_attempts == 1
+
+
+async def test_worker_offline_across_approval_deadline_cannot_accept_late_refund(
+    temporal_env, worker_for
+):
+    activities = FakeActivities(REFUND)
+    worker = worker_for(activities)
+    async with worker:
+        handle = await start(temporal_env, worker)
+        await awaiting(handle)
+    await temporal_env.sleep(timedelta(hours=24, seconds=1))
+    async with Worker(
+        temporal_env.client,
+        task_queue=worker.task_queue,
+        workflows=[TicketWorkflow],
+        activities=[activities.decide, activities.validate, activities.act],
+        max_cached_workflows=0,
+    ):
+        result = await handle.result()
+        assert result.decision.reason == "approval_timeout"
+        assert result.approval is None
+        assert [r.decision.action for r in activities.requests] == ["escalate"]
+
+
+@pytest.mark.parametrize(
+    "failures,permanent,attempts", [(1, False, 2), (100, False, 3), (100, True, 1)]
+)
+async def test_validation_failures_retry_or_escalate(
+    temporal_env, worker_for, failures, permanent, attempts
+):
+    activities = FakeActivities(fail_validate=failures, permanent=permanent)
+    async with worker_for(activities) as worker:
+        result = await (await start(temporal_env, worker)).result()
+        assert result.step == "completed"
+        assert activities.validate_attempts == attempts
+        if failures == 1:
+            assert result.decision == REPLY
+        else:
+            assert result.decision.reason == "decision_failed:CatalogError"
+            assert result.result["action"] == "escalate"

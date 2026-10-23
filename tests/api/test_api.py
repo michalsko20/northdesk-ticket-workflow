@@ -88,6 +88,29 @@ async def test_concurrent_submissions_start_one_workflow(api):
     assert (await api.post("/tickets", json={**payload, "body": "changed"})).json()["duplicate"]
 
 
+async def test_concurrent_different_payloads_preserve_the_accepted_ticket(api):
+    ticket_id = f"different-{uuid.uuid4()}"
+    candidates = [
+        ({"customer_id": "C-200", "subject": "Password", "body": "Forgot password"}, "reply"),
+        ({"customer_id": "C-300", "subject": "API down", "body": "API outage"}, "escalate"),
+        ({"customer_id": "C-100", "subject": "Lunch", "body": "Pizza?"}, "close"),
+    ] * 8
+    responses = await asyncio.gather(
+        *(
+            api.post("/tickets", json={"ticket_id": ticket_id, **payload})
+            for payload, _ in candidates
+        )
+    )
+    assert all(response.status_code == 202 for response in responses)
+    winners = [
+        index for index, response in enumerate(responses) if not response.json()["duplicate"]
+    ]
+    assert len(winners) == 1
+    expected_action = candidates[winners[0]][1]
+    state = await wait_for(api, ticket_id, "completed")
+    assert state["result"]["action"] == expected_action
+
+
 @pytest.mark.parametrize("approved,action", [(True, "refund"), (False, "escalate")])
 async def test_refund_approval_api(api, approved, action):
     payload = ticket(refund=True)

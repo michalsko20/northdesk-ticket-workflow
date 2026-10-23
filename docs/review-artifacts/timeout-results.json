@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-23",
+  "environment": "macOS ARM64, pinned Temporal test server, time skipping disabled",
+  "result": "Three runs failed only their final readable-reason assertion (F5); safety and attempt assertions passed",
+  "cases": [
+    {"target": "decide", "attempts": 3, "elapsedSeconds": 273.46, "step": "completed", "action": "escalate", "reason": "decision_failed:1"},
+    {"target": "validate", "attempts": 3, "elapsedSeconds": 33.44, "step": "completed", "action": "escalate", "reason": "decision_failed:1"},
+    {"target": "act", "attempts": 5, "elapsedSeconds": 90.45, "step": "failed", "result": null, "error": "action_failed:1"}
+  ]
+}

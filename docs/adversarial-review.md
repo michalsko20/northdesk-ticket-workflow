@@ -72,3 +72,72 @@ in the handoff and are not counted as new findings.
   13 passed**, all failures from HTTP 500 responses.
 - Final offline container suite: **99 passed, 8 xfailed**; Ruff lint, formatting,
   and mypy passed. The eight expected failures remain unfixed and are intentional.
+
+## Expanded review
+
+The initial HTTP pass above was followed by a broader review of ordinary failures,
+concurrency, persistence, provider protocols, and demo behavior. See the
+[coverage matrix](review-matrix.md) and [browser evidence](review-artifacts/e2e/README.md).
+Application code remains unchanged; the following are additional confirmed findings.
+
+### F3 — P2: malformed model output can permanently break ticket reads
+
+`TicketWorkflow.run` retains the raw proposal before independent validation.
+`validate_decision` safely escalates an unknown shape, but the retained proposal
+may still contain a lone surrogate. Temporal's converter and the SQLite fake can
+persist that value. The workflow completes, while every subsequent HTTP status
+read fails with 500 when FastAPI tries to serialize the stored state.
+
+The same character in a reply message passes the current string/nonempty checks,
+so an invalid Unicode reply is also accepted by the fake Helpdesk. Rejecting only
+HTTP request input does not address either path.
+
+`tests/api/test_model_output.py` exercises the real GLM adapter and OpenAI SDK via
+a mocked HTTP transport, then real activities, validation, Temporal, SQLite and
+the HTTP status endpoint. Two cases reproduce this defect. A nonfinite numeric
+proposal is a passing control: it safely escalates and remains readable in this
+response serialization path. No live provider behavior or frequency is inferred.
+
+Repair needs both model output validation and a safe representation of raw
+proposals for status/audit reads, including histories already containing such data.
+
+### F4 — P3: SQLite connections rely on garbage collection for closure
+
+`FakeHelpdesk.__init__` and `execute` use `with self._connect() as db` without
+calling `close`. Python's connection context manager handles transactions but does
+not close the connection, as the [Python 3.12 documentation](https://docs.python.org/3.12/library/sqlite3.html#how-to-use-the-connection-context-manager)
+explains. A tracked real connection confirms the omission after initialization,
+successful writes, duplicate reads, conflicts and temporary failures.
+
+Transactions still commit/roll back correctly. This is a resource-lifetime defect;
+no permanent leak, descriptor exhaustion or service outage was demonstrated.
+Use explicit connection closure while preserving the transaction boundary.
+
+### F5 — P3: actual timeouts produce numeric failure labels
+
+The workflow reads `getattr(exc.cause, "type", ...)` to classify activity errors.
+For an SDK `TimeoutError`, `type` is a `TimeoutType` enum rather than an application
+error name. It becomes `1` in the public failure reason.
+
+Actual wall-clock tests, with automatic time skipping disabled, observed:
+
+| Stalled activity | Attempts | Observed duration | Correct business outcome | Diagnostic defect |
+| --- | --- | --- | --- | --- |
+| Decide | 3 | 273.46 s | Completed escalation | `decision_failed:1` |
+| Validate | 3 | 33.44 s | Completed escalation | `decision_failed:1` |
+| Act | 5 | 90.45 s | Failed, no result | `action_failed:1` |
+
+All three tests failed only their final assertion expecting a readable timeout
+name; their attempt counts and terminal behavior assertions passed. These timings
+come from the pinned test server, not a production latency guarantee. A faster
+unit reproduction in `tests/unit/test_timeout_reporting.py` isolates the label
+defect without waiting for deadlines.
+
+The three real-time tests are opt-in and intentionally still expose the failure:
+
+```bash
+RUN_SLOW_TIMEOUT_TESTS=1 uv run --locked pytest tests/slow/test_activity_timeouts.py -q
+```
+
+They are skipped by default. SDK timeout subclasses should be classified
+explicitly, retaining a readable timeout name/type.

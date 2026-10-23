@@ -8,6 +8,7 @@ import pytest
 from temporalio.client import Client
 
 from northdesk.api import create_app
+from northdesk.domain.models import Approval
 
 
 @pytest.fixture
@@ -95,3 +96,41 @@ async def test_approval_coercion_is_rejected(input_api, approved):
     )
     assert response.status_code == 422
     temporal.get_workflow_handle_for.assert_not_called()
+
+
+async def test_exact_maximum_ticket_lengths_are_accepted(input_api):
+    api, temporal = input_api
+    response = await api.post(
+        "/tickets",
+        json={
+            "ticket_id": "t" * 80,
+            "customer_id": "c" * 80,
+            "subject": "s" * 500,
+            "body": "b" * 20000,
+        },
+    )
+    assert response.status_code == 202
+    temporal.start_workflow.assert_awaited_once()
+
+
+@pytest.mark.parametrize("reviewer,expected", [("x" * 100, 200), ("x" * 101, 422), (" ", 422)])
+async def test_reviewer_length_boundaries(input_api, reviewer, expected):
+    api, temporal = input_api
+    handle = temporal.get_workflow_handle_for.return_value
+    handle.execute_update = AsyncMock(return_value=Approval(True, reviewer))
+    response = await api.post(
+        "/tickets/any/approval", json={"approved": True, "reviewer": reviewer}
+    )
+    assert response.status_code == expected
+    if expected == 422:
+        handle.execute_update.assert_not_called()
+
+
+@pytest.mark.parametrize("value", [None, [], "ticket", 42])
+async def test_top_level_json_type_confusion_is_rejected(input_api, value):
+    api, temporal = input_api
+    response = await api.post(
+        "/tickets", content=json.dumps(value), headers={"content-type": "application/json"}
+    )
+    assert response.status_code == 422
+    temporal.start_workflow.assert_not_called()
