@@ -5,6 +5,11 @@ findings remain open: F1/F2 HTTP validation error handling, F3 unreadable persis
 model proposals, F4 SQLite connection closure, and F5 timeout diagnostics. Details
 and repair suggestions are in the [review report](adversarial-review.md).
 
+The later [limits review](limits-review.md) adds F6 (aggregate workflow payloads),
+F7 (JSON decoder resource errors), F8 (Retry-After propagation), and bounded load
+measurements up to 200 concurrent submissions. Its evidence includes 1,693 unique
+tickets cross-checked against persisted effects.
+
 This matrix cross-checks the implemented backend and its documented contracts.
 It records evidence rather than claiming exhaustive proof over all inputs,
 deployments or future model outputs. Production features already excluded in the
@@ -130,7 +135,7 @@ restarting the isolated Temporal, API and worker containers together.
 ## Verification results
 
 - Original handoff: 86 passing tests.
-- Expanded offline container suite: **204 passed, 13 xfailed, 3 skipped**; Ruff
+- Before the limits follow-up: **204 passed, 13 xfailed, 3 skipped**; Ruff
   lint, Ruff formatting and mypy passed. This is 220 collected pytest cases.
 - The 13 strict expected failures reproduce F1/F2 (8), F3 (2), F4 (1) and F5 (2).
   They remain defects, not passing assertions.
@@ -143,6 +148,9 @@ restarting the isolated Temporal, API and worker containers together.
   cross-checks. Browser runtime exceptions were absent; expected HTTP error and
   lost-response console entries are retained.
 - Application files under `src/` and the original live GLM stack were unchanged.
+- After the limits follow-up: **210 passed, 18 xfailed, 3 skipped** in the offline
+  container, with lint/format/mypy passing. The five added expected failures cover
+  F6 (1), F7 (2), F8 (2). The timeout-overlap and whole-ticket budget tests pass.
 
 ## Boundaries and remaining checks
 
@@ -151,8 +159,9 @@ restarting the isolated Temporal, API and worker containers together.
   handoff's live GLM smoke run is separate evidence.
 - No Azure deployment, production IAM, cumulative accounting across different
   ticket IDs, multi-host SQLite, or retention-expired registry is implemented.
-- This is not a sustained capacity/load test, a disk-corruption or disk-full
-  experiment, or an exhaustive evaluation of model answer quality.
+- The limits follow-up adds bounded load probes. There is still no long-duration
+  soak test, stress-to-exhaustion, disk-corruption/disk-full experiment, or
+  exhaustive evaluation of model answer quality.
 - Frozen replay histories cover the current workflow paths; future workflow
   versions and migrations still require an explicit compatibility decision.
 - The pinned embedded Temporal server is useful for tests but does not establish

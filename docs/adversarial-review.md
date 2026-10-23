@@ -141,3 +141,12 @@ RUN_SLOW_TIMEOUT_TESTS=1 uv run --locked pytest tests/slow/test_activity_timeout
 
 They are skipped by default. SDK timeout subclasses should be classified
 explicitly, retaining a readable timeout name/type.
+
+## Limits follow-up
+
+The [limits review](limits-review.md) documents three additional findings:
+F6 (oversized aggregate completion state after an effect is committed), F7
+(JSON parser resource exceptions bypassing permanent tool-error classification),
+and F8 (provider Retry-After lost before Temporal retry scheduling). It also
+records query timeouts under higher load, raw request byte behavior, and the
+passing overlapping-refund-attempt test. No application fixes were applied.

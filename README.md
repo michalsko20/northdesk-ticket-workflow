@@ -136,6 +136,11 @@ GitHub Actions runs the same container command on every push and pull request. C
 
 ## Architecture
 
+Additional review evidence: [corner-case matrix](docs/review-matrix.md),
+[known findings](docs/adversarial-review.md), [load/limit checks and operating practices](docs/limits-review.md),
+and [browser E2E screenshots](docs/review-artifacts/e2e/README.md). Known defects
+have strict expected-failure reproductions; they are not counted as passing tests.
+
 ```mermaid
 flowchart LR
     Client --> API[FastAPI]
