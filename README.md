@@ -142,7 +142,7 @@ flowchart LR
     API -->|Start / Query / Update| Temporal[Temporal history and timers]
     Worker -->|Poll task queue| Temporal
     Worker --> Decide[Decide activity]
-    Decide --> LLM[Fake or OpenAI provider]
+    Decide --> LLM[Fake, OpenAI or GLM provider]
     Decide --> Tools[Read-only tools and trusted catalog]
     Worker --> Validate[Validate activity and pure rules]
     Worker --> Act[Act activity]
@@ -162,9 +162,28 @@ Waiting uses a durable Temporal timer, so it occupies no dedicated process and s
 
 The agent owns a bounded loop: ask the provider, execute its selected tools, return results with matching call IDs, and repeat until a decision arrives. Both providers use that same code. The fake classifies ticket content, requests customer/invoice/KB tools and builds answers from their results; it is not keyed on example ticket IDs. Default limits are six model rounds and twelve tool calls per activity attempt.
 
-The three tools are `get_customer`, `get_invoices` and `search_kb`. Customer tools have no model-controlled customer-ID argument: they are bound to the ticket's customer. Tools cannot refund, approve, close or escalate. The code also checks customer existence even if a real model chooses not to call `get_customer`.
+The three read-only tools are `get_customer`, `get_invoices` and `search_kb`. Customer tools have no model-controlled customer-ID argument: they are bound to the ticket's customer. Tools cannot refund, approve, close or escalate. The code also checks customer existence even if a real model chooses not to call `get_customer`.
 
 The real provider uses [OpenAI Responses tool calling](https://developers.openai.com/api/docs/guides/function-calling), strict JSON schemas and `store=false`. To enable it, copy `.env.example` to `.env`, set `LLM_MODE=openai`, supply `OPENAI_API_KEY`, and optionally change `LLM_MODEL`. Recreate the API and worker with `docker compose up -d`. The default real-model setting is `gpt-4.1-mini`; select a model available to your account that supports tool calling and structured outputs.
+
+### GLM / Z.ai profiles
+
+An additional adapter supports the existing profile variables `ZAI_API_KEY`, `GLM_MODEL` and `GLM_BASE_URL`. With the profile loaded in your shell:
+
+```bash
+LLM_MODE=glm docker compose up --build -d --wait
+python3 scripts/demo.py --suffix=-glm-demo --approve-refunds
+```
+
+The model defaults to `glm-5.3-flash`. `GLM_BASE_URL` accepts either an SDK base URL or a full `/chat/completions` endpoint. The repository default is the standard Z.ai API; an explicitly exported profile endpoint takes precedence. Use an endpoint and key appropriate for your account and deployment. The service does not read personal Codex configuration files, and credentials are passed only at runtime, never written into source or images.
+
+GLM uses [native Chat Completions function calls](https://docs.z.ai/guides/capabilities/function-calling). Its adapter converts the shared agent conversation, preserves tool-call IDs and `reasoning_content` for continuation, and obtains the final proposal through a `submit_decision` function. That function only returns data for independent validation; it never executes or approves an action. Forcing JSON-object mode alongside tools was unreliable in a live test, so the GLM adapter uses the final proposal tool instead. It rejects a batch mixing submission with read tools. Reasoning is not logged or included in ticket state.
+
+To return to the keyless default explicitly:
+
+```bash
+LLM_MODE=fake docker compose up -d --wait
+```
 
 Schema correctness does not grant permission to act. Ticket text is untrusted data in a user message. The model proposes a decision, and trusted code checks allowed category/priority/action, payloads and invoice data. Refunds require a paid invoice belonging to the same customer and a positive finite amount no greater than that invoice. EUR amounts use decimal strings and `Decimal` with cent precision. Approval is always a workflow step; the model has no field or tool that bypasses it.
 
@@ -225,6 +244,6 @@ Concrete corrections to generated output:
 
 Assumptions: the ticket's customer ID is supplied by a trusted caller; invoice and KB data is static; a refund uses an existing paid invoice; rejection escalates; off-topic requests may close. Missing customer data escalates instead of trying to repair the customer record. The first content and first approval win. These are explicit demo policies rather than universal support rules.
 
-Limitations: no production authentication/authorization, no per-customer invoice locking or cumulative refund accounting across different ticket IDs, no persistent read projection beyond Temporal retention, no real Helpdesk integration, and no live-model quality/cost evaluation. The real provider's HTTP protocol is tested with a mocked transport; no paid model call was made. The fake is a deterministic stand-in, not a security filter or quality benchmark. Optional distributed tracing and infrastructure-as-code are omitted to keep the working core small.
+Limitations: no production authentication/authorization, no per-customer invoice locking or cumulative refund accounting across different ticket IDs, no persistent read projection beyond Temporal retention, and no real Helpdesk integration. Both provider protocols are tested with mocked transports; the GLM profile was additionally exercised against the live API on the sample tickets. This small demonstration is not a representative quality, cost or reliability benchmark. The OpenAI adapter has not been tested with a live key. The fake is a deterministic stand-in, not a security filter or quality benchmark. Optional distributed tracing and infrastructure-as-code are omitted to keep the working core small.
 
 Next steps: authenticated customer/operator identities, real Helpdesk reconciliation, cumulative refund controls, a shared action store, representative live-model evaluations, durable status projections if needed beyond retention, workflow replay checks during upgrades, and IaC/telemetry for deployment.

@@ -173,3 +173,45 @@ def test_glm_requires_its_own_key_and_fake_does_not():
         Settings(_env_file=None, llm_mode="glm", zai_api_key="")
     settings = Settings(_env_file=None, llm_mode="glm", zai_api_key="not-a-real-key")
     assert settings.glm_model == "glm-5.3-flash"
+
+
+@pytest.mark.parametrize("arguments,include_read", [("invalid-json", False), ("{}", True)])
+async def test_glm_rejects_malformed_final_proposals_and_mixed_batches(arguments, include_read):
+    calls = [
+        {
+            "id": "final",
+            "type": "function",
+            "function": {
+                "name": "submit_decision",
+                "arguments": arguments,
+            },
+        }
+    ]
+    if include_read:
+        calls.append(
+            {
+                "id": "read",
+                "type": "function",
+                "function": {
+                    "name": "get_customer",
+                    "arguments": "{}",
+                },
+            }
+        )
+    provider = await provider_with_transport(
+        lambda request: httpx2.Response(
+            200,
+            json=completion(
+                {
+                    "role": "assistant",
+                    "tool_calls": calls,
+                },
+                "tool_calls",
+            ),
+        )
+    )
+    try:
+        with pytest.raises(MalformedResponse):
+            await provider.step([], [])
+    finally:
+        await provider.close()
