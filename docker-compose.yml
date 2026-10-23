@@ -1,0 +1,67 @@
+name: northdesk
+
+x-app: &app
+  image: northdesk:local
+  build:
+    context: .
+    target: runtime
+  init: true
+  environment: &env
+    TEMPORAL_ADDRESS: temporal:7233
+    TEMPORAL_NAMESPACE: default
+    TEMPORAL_TASK_QUEUE: northdesk-tickets
+    LLM_MODE: ${LLM_MODE:-fake}
+    LLM_MODEL: ${LLM_MODEL:-gpt-4.1-mini}
+    OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    HELPDESK_FAILURE_RATE: ${HELPDESK_FAILURE_RATE:-0.2}
+    HELPDESK_DB_PATH: /state/helpdesk.db
+  depends_on:
+    temporal:
+      condition: service_healthy
+
+services:
+  temporal:
+    image: temporalio/temporal:1.9.1
+    command: ["server", "start-dev", "--ip", "0.0.0.0", "--db-filename", "/state/temporal.db", "--log-format", "json"]
+    ports:
+      - "127.0.0.1:7233:7233"
+      - "127.0.0.1:8233:8233"
+    volumes:
+      - temporal-data:/state
+    healthcheck:
+      test: ["CMD", "temporal", "operator", "cluster", "health", "--address", "127.0.0.1:7233"]
+      interval: 3s
+      timeout: 5s
+      retries: 30
+
+  api:
+    <<: *app
+    ports:
+      - "127.0.0.1:8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/ready', timeout=3)"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  worker:
+    <<: *app
+    command: ["python", "-m", "northdesk.worker"]
+    volumes:
+      - helpdesk-data:/state
+    stop_grace_period: 30s
+
+  tests:
+    profiles: ["test"]
+    image: northdesk-tests:local
+    build:
+      context: .
+      target: tests
+    network_mode: none
+    environment:
+      LLM_MODE: fake
+      HELPDESK_FAILURE_RATE: "0"
+
+volumes:
+  temporal-data:
+  helpdesk-data:

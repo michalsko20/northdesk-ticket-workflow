@@ -1,0 +1,34 @@
+[project]
+name = "northdesk"
+version = "0.1.0"
+description = "Durable, approval-gated support ticket processing"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "fastapi>=0.161.1,<0.162",
+  "uvicorn>=0.41,<1",
+  "temporalio==1.34.0",
+  "pydantic-settings>=2.16.1,<3",
+  "openai>=3.37.0,<4",
+]
+
+[dependency-groups]
+dev = ["pytest>=9,<10", "pytest-asyncio>=1.4,<2", "httpx>=0.28,<1", "ruff>=0.15,<1"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/northdesk"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+filterwarnings = ["error"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
