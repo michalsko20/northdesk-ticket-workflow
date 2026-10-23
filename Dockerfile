@@ -20,5 +20,6 @@ COPY tests ./tests
 COPY scripts ./scripts
 COPY Makefile ./
 ENV TEMPORAL_TEST_SERVER=/opt/temporal-test-server
+ENV RUFF_CACHE_DIR=/tmp/ruff-cache MYPY_CACHE_DIR=/tmp/mypy-cache
 USER app
 CMD ["sh", "scripts/check.sh"]
