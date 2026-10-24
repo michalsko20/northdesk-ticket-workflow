@@ -38,6 +38,8 @@ x-app: &app
     WORKER_ACTIVITY_CONCURRENCY: ${WORKER_ACTIVITY_CONCURRENCY:-10}
     WORKER_WORKFLOW_CONCURRENCY: ${WORKER_WORKFLOW_CONCURRENCY:-16}
     WORKER_MAX_CACHED_WORKFLOWS: ${WORKER_MAX_CACHED_WORKFLOWS:-512}
+    OTEL_SDK_DISABLED: ${OTEL_SDK_DISABLED:-false}
+    OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-http://jaeger:4317}
   depends_on:
     temporal:
       condition: service_healthy
@@ -100,6 +102,21 @@ services:
     environment:
       LLM_MODE: fake
       HELPDESK_FAILURE_RATE: "0"
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.62.0
+    ports:
+      - "127.0.0.1:16686:16686"
+      - "127.0.0.1:4317:4317"
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
 
 volumes:
   temporal-data:

@@ -379,3 +379,28 @@ class TestToolInputSanitization:
         ticket = Ticket("T-TOOL", "C-100", "Test", "Test body")
         with pytest.raises(PermanentAgentError, match="unknown_tool_or_invalid_arguments"):
             execute_tool(catalog, ticket, "get_customer", '{"customer_id": "other"}')
+
+
+class TestTracingConfiguration:
+    def test_tracing_disabled_by_default(self, monkeypatch):
+        monkeypatch.delenv("OTEL_SDK_DISABLED", raising=False)
+        from northdesk.tracing import _enabled, configure_tracing
+
+        assert not _enabled()
+        assert configure_tracing("test") is None
+
+    def test_tracing_enabled_with_false(self, monkeypatch):
+        monkeypatch.setenv("OTEL_SDK_DISABLED", "false")
+        from northdesk.tracing import _enabled
+
+        assert _enabled()
+
+    def test_tracing_endpoint_from_env(self, monkeypatch):
+        monkeypatch.setenv("OTEL_SDK_DISABLED", "false")
+        monkeypatch.setenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://custom:9999")
+        from northdesk.tracing import configure_tracing
+
+        provider = configure_tracing("test-role")
+        assert provider is not None
+        # Clean up to avoid leaking spans into other tests.
+        provider.shutdown()

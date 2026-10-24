@@ -348,3 +348,17 @@ This build applies defense-in-depth beyond the core workflow correctness guarant
 | CI | Dependency vulnerability audit | `pip-audit` on locked production dependencies runs on every push/PR |
 
 These controls are tested by 34 dedicated security tests in `tests/unit/test_security_hardening.py`.
+
+## Distributed tracing (OpenTelemetry)
+
+Tracing is built in and disabled by default for offline tests. Set `OTEL_SDK_DISABLED=false` to enable.
+
+| Component | What is traced |
+| --- | --- |
+| API | FastHTTP request spans (`POST /tickets`, `GET /tickets/{id}`, `POST /tickets/{id}/approval`, health endpoints) with endpoint/dependency/serialization child spans |
+| Workflow | Temporal `StartWorkflow`, `RunWorkflow`, `CompleteWorkflow` spans via `TracingInterceptor` |
+| Activities | `StartActivity`/`RunActivity` for `decide_ticket`, `validate_ticket`, `act_on_ticket` |
+
+All three roles export to a single OTLP endpoint (default `http://localhost:4317`). Docker Compose includes a Jaeger all-in-one container on `localhost:16686` (UI) and `localhost:4317` (OTLP gRPC).
+
+A single ticket submission produces one trace with ~21 spans from the HTTP POST through the workflow to all three activities, including activity retries.

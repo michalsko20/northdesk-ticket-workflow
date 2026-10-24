@@ -12,11 +12,18 @@ from northdesk.logging import configure_logging
 from northdesk.services.catalog import Catalog
 from northdesk.services.helpdesk import FakeHelpdesk
 from northdesk.settings import Settings
+from northdesk.tracing import _enabled, configure_tracing
 from northdesk.workflows.ticket import TicketWorkflow
 
 
 async def main() -> None:
     configure_logging()
+    configure_tracing("worker")
+    _interceptors: list = []
+    if _enabled():
+        from temporalio.contrib.opentelemetry import TracingInterceptor
+
+        _interceptors.append(TracingInterceptor())
     settings = Settings()
     provider: Provider
     if settings.llm_mode == "fake":
@@ -38,6 +45,7 @@ async def main() -> None:
         async with Worker(
             client,
             task_queue=settings.temporal_task_queue,
+            interceptors=_interceptors,
             workflows=[TicketWorkflow],
             activities=[
                 activities.decide_ticket,

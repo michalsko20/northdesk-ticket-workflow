@@ -29,6 +29,7 @@ from northdesk.domain.payloads import bounded_state, has_control_characters
 from northdesk.http_limits import HttpLimits, SecurityHeaders
 from northdesk.logging import configure_logging
 from northdesk.settings import Settings
+from northdesk.tracing import configure_tracing
 from northdesk.workflows.ticket import TicketWorkflow
 
 logger = logging.getLogger(__name__)
@@ -90,6 +91,7 @@ def ticket_log(ticket_id: str, event: str) -> str:
 def create_app(settings: Settings | None = None, client: Client | None = None) -> FastAPI:
     config = settings or Settings()
     query_slots = asyncio.Semaphore(config.http_query_concurrency)
+    configure_tracing("api")
 
     @asynccontextmanager
     async def lifespan(application: FastAPI) -> AsyncIterator[None]:
