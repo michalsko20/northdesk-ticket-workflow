@@ -12,3 +12,13 @@ jobs:
         run: docker compose --profile test build tests
       - name: Lint, type-check and test without network
         run: docker compose --profile test run --rm --no-deps tests
+
+  dependency-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      - name: Audit production dependencies for known vulnerabilities
+        run: uv export --locked --no-dev | uv tool run pip-audit --requirement /dev/stdin --strict

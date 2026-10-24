@@ -12,7 +12,7 @@ x-app: &app
     - ALL
   read_only: true
   tmpfs:
-    - /tmp:size=64m,mode=0700
+    - /tmp:size=64m,mode=0700,uid=10001,gid=10001
   deploy:
     resources:
       limits:
@@ -80,7 +80,7 @@ services:
     volumes:
       - helpdesk-data:/state
     tmpfs:
-      - /tmp:size=64m,mode=0700
+      - /tmp:size=64m,mode=0700,uid=10001,gid=10001
     stop_grace_period: 30s
 
   tests:
@@ -96,7 +96,7 @@ services:
       - ALL
     read_only: true
     tmpfs:
-      - /tmp:size=256m,mode=0700
+      - /tmp:size=256m,mode=0700,uid=10001,gid=10001
     environment:
       LLM_MODE: fake
       HELPDESK_FAILURE_RATE: "0"

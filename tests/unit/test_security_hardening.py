@@ -314,3 +314,68 @@ class TestHelpdeskPermissions:
         FakeHelpdesk(db_path)
         mode = stat.S_IMODE(os.stat(str(state_dir)).st_mode)
         assert mode == 0o700, f"Expected 0o700, got {oct(mode)}"
+
+
+class TestSecretLeakagePrevention:
+    """Verify that sensitive settings are not exposed through error messages."""
+
+    def test_settings_str_does_not_leak_api_key(self):
+        settings = Settings(llm_mode="glm", zai_api_key="super-secret-key-12345")
+        rendered = str(settings)
+        assert "super-secret-key-12345" not in rendered
+
+    def test_settings_repr_does_not_leak_api_key(self):
+        settings = Settings(llm_mode="glm", zai_api_key="super-secret-key-12345")
+        rendered = repr(settings)
+        assert "super-secret-key-12345" not in rendered
+
+    def test_validation_error_does_not_leak_api_key(self):
+        with pytest.raises(ValidationError) as exc_info:
+            Settings(
+                llm_mode="glm",
+                zai_api_key="",
+                glm_base_url="http://untrusted.example.com/v1",
+            )
+        message = str(exc_info.value)
+        assert "super-secret" not in message
+
+    def test_validation_error_does_not_leak_base_url(self):
+        with pytest.raises(ValidationError) as exc_info:
+            Settings(
+                llm_mode="glm",
+                zai_api_key="key",
+                glm_base_url="http://internal-infra.svc.local:8080/v1",
+            )
+        message = str(exc_info.value)
+        assert "internal-infra.svc.local" not in message
+
+
+class TestToolInputSanitization:
+    def test_search_kb_rejects_control_characters_in_query(self):
+        from northdesk.agent.providers import PermanentAgentError
+        from northdesk.agent.tools import execute_tool
+        from northdesk.services.catalog import Catalog
+
+        catalog = Catalog()
+        ticket = Ticket("T-TOOL", "C-100", "Test", "Test body")
+        with pytest.raises(PermanentAgentError, match="unknown_tool_or_invalid_arguments"):
+            execute_tool(catalog, ticket, "search_kb", '{"query": "help\\u0000me"}')
+
+    def test_search_kb_accepts_clean_query(self):
+        from northdesk.agent.tools import execute_tool
+        from northdesk.services.catalog import Catalog
+
+        catalog = Catalog()
+        ticket = Ticket("T-TOOL", "C-100", "Test", "Test body")
+        result = execute_tool(catalog, ticket, "search_kb", '{"query": "reset password"}')
+        assert isinstance(result, list)
+
+    def test_get_customer_rejects_non_empty_params(self):
+        from northdesk.agent.providers import PermanentAgentError
+        from northdesk.agent.tools import execute_tool
+        from northdesk.services.catalog import Catalog
+
+        catalog = Catalog()
+        ticket = Ticket("T-TOOL", "C-100", "Test", "Test body")
+        with pytest.raises(PermanentAgentError, match="unknown_tool_or_invalid_arguments"):
+            execute_tool(catalog, ticket, "get_customer", '{"customer_id": "other"}')

@@ -326,3 +326,25 @@ Assumptions: the ticket's customer ID is supplied by a trusted caller; invoice a
 Limitations: no production authentication/authorization, no per-customer invoice locking or cumulative refund accounting across different ticket IDs, no persistent read projection beyond Temporal retention, and no real Helpdesk integration. Both provider protocols are tested with mocked transports; the GLM profile was additionally exercised against the live API on the sample tickets. This small demonstration is not a representative quality, cost or reliability benchmark. The OpenAI adapter has not been tested with a live key. The fake is a deterministic stand-in, not a security filter or quality benchmark. Optional distributed tracing and infrastructure-as-code are omitted to keep the working core small.
 
 Next steps: authenticated customer/operator identities, real Helpdesk reconciliation, cumulative refund controls, a shared action store, representative live-model evaluations, durable status projections if needed beyond retention, workflow replay checks during upgrades, and IaC/telemetry for deployment.
+
+## Security hardening
+
+This build applies defense-in-depth beyond the core workflow correctness guarantees:
+
+| Layer | Control | Enforcement |
+| --- | --- | --- |
+| HTTP input | Control/format/bidirectional character rejection | Pydantic validators reject `\x00`, escape sequences, RLO/LRO overrides and zero-width marks in ticket subject, body and reviewer fields |
+| HTTP transport | Request smuggling defense | Middleware rejects conflicting `Content-Length` values and combined `Transfer-Encoding` + `Content-Length` |
+| HTTP response | Security headers | `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer`, `Cache-Control: no-store` on every response |
+| Settings | Provider URL TLS enforcement | GLM base URL must use HTTPS unless the host is localhost or 127.0.0.1 |
+| Settings | Temporal address format | Validates `host:port` with a bounded port range |
+| Settings | State path traversal prevention | Rejects `..` and null bytes in `HELPDESK_DB_PATH` |
+| Domain policy | Model output sanitization | Proposal message and reason fields are checked for control characters before a decision is accepted |
+| Tool inputs | KB search query sanitization | Model-supplied search queries cannot contain control characters |
+| Storage | SQLite file permissions | Database file `0o600`, state directory `0o700` |
+| Containers | Least privilege | `no-new-privileges`, `cap_drop: ALL`, read-only root filesystem, tmpfs with explicit uid/gid/mode |
+| Containers | Resource limits | CPU and memory limits on API and worker containers |
+| Uvicorn | Connection limits | `--limit-concurrency 256`, `--timeout-keep-alive 5`, bounded incomplete-event size |
+| CI | Dependency vulnerability audit | `pip-audit` on locked production dependencies runs on every push/PR |
+
+These controls are tested by 34 dedicated security tests in `tests/unit/test_security_hardening.py`.
