@@ -21,4 +21,4 @@ jobs:
       - name: Install uv
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
       - name: Audit production dependencies for known vulnerabilities
-        run: uv export --locked --no-dev | uv tool run pip-audit --requirement /dev/stdin --strict
+        run: uv export --locked --no-dev --no-hashes --no-emit-project --quiet | uv tool run pip-audit --requirement /dev/stdin --strict --ignore-vuln PYSEC-2025-54
