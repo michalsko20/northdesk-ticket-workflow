@@ -1,12 +1,12 @@
 # Handoff
 
-Verified on 2026-10-23. This document is for continuing development or preparing the technical walkthrough.
+Original baseline verified on 2026-10-23; fixes verified on 2026-10-24. This document is for continuing development or preparing the technical walkthrough.
 
 ## Project and current state
 
 - Repository: <https://github.com/michalsko20/northdesk-ticket-workflow>
 - Local checkout: `/Users/michalskoneczny/Projects/elevenlabs/northdesk-ticket-workflow`
-- Branch: `main`. Implementation, tests and documentation are committed and pushed.
+- Current branch: `test/adversarial-inputs`. Fixes and evidence are committed locally; not pushed. Core fix `2b21fa5`, repeatable verification scripts `aeddeb6`. The main-branch CI below is historical.
 - Latest verified implementation/documentation commit before this handoff: `563565c`.
 - CI for that commit: [successful run](https://github.com/michalsko20/northdesk-ticket-workflow/actions/runs/39973655003).
 - Final verified suite: **86 tests**, Ruff lint, Ruff format check and mypy. Tests ran in a container with external networking disabled; CI also passed on AMD64.
@@ -14,6 +14,20 @@ Verified on 2026-10-23. This document is for continuing development or preparing
 - At handoff, the API, Temporal and worker containers are running locally. The worker uses `LLM_MODE=glm`, model `glm-5.3-flash`. A fresh checkout defaults to keyless fake mode.
 
 No implementation work is currently blocked or required to complete the agreed backend scope. Production deployment and sending the repository to a recruiter have not been performed.
+
+## Current fix verification (2026-10-24)
+
+- Eight confirmed review findings fixed; see [fix report](docs/fixes.md).
+- Current container suite: 271 passed, 3 opt-in slow tests skipped. All three slow tests were also run separately and passed. Ruff/format/mypy pass.
+- Five frozen histories replay; original oversized completion recovers on a real Temporal server with one effect and the original receipt.
+- HTTP body 256 KiB/10 s; admission 32 requests/process; active Query 4 slots/1 s; worker 10 activity slots, 16 workflow slots, cache 512. All settings are in `.env.example` and README.
+- Keep workflow patches `readable-activity-errors-v1` and `bounded-ticket-state-v1` while old histories remain retained.
+- 500 unique tickets/concurrency 200 completed; controlled 503 shedding is recorded explicitly. 531 unique effects across all load phases; zero unexpected HTTP errors.
+- New Playwright evidence: 20 screenshots, worker/full-stack restart and lost-ack recovery, no JavaScript page errors.
+- [Polish startup guide](README.pl.md), [architecture/research](docs/architecture.md), [SVG diagram](docs/architecture.svg).
+- `make test` is the offline container gate. Load test scripts write ignored `artifacts/` by default; committed baseline reports must not be overwritten.
+- Main API/worker upgraded with the existing GLM profile preserved; seven new live examples and their receipts verified. Health endpoints return 200.
+- Extra `northdesk-limits` stack uses ports 8002/7235/8235 and separate volumes; is now stopped with volumes preserved. Main stack remains running on 8000/7233/8233.
 
 ## Working agreement
 
@@ -94,7 +108,7 @@ GLM requires its own Chat Completions adapter. Preserve native tool-call IDs and
 ## Known pitfalls and boundaries
 
 - An Update on a closed workflow can return Temporal `NOT_FOUND`. The approval endpoint uses Describe on that error to distinguish closed (`409`) from nonexistent (`404`). Do not simplify this to unconditional HTTP 404.
-- Querying retained completed workflows still needs an available polling worker. Readiness currently checks Temporal connectivity, not task-queue pollers.
+- Completed workflows read their persisted result without a worker. Active Query needs a polling worker and returns 503/Retry-After after 1 s or when its four slots are full. `/health/ready` checks Temporal; `/health/worker` checks recent pollers (120 s).
 - The replacement-worker test disables workflow caching to force replay and avoid sticky-routing behavior in the limited test server.
 - Temporal's dev image runs as user `temporal`: persistence is mounted under `/home/temporal`, not a root-owned directory. Test-tool caches use `/tmp` because the test container also runs without root.
 - The pinned Temporal test server is downloaded and checksum-verified during image build. Do not restore SDK auto-downloads at test runtime.

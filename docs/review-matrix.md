@@ -1,3 +1,5 @@
+> Historical pre-fix baseline. See [fixes and current verification](fixes.md) for the 2026-10-24 resolution.
+
 # Cross-check matrix, 2026-10-23
 
 The core refund, approval and idempotency rules held in the exercised cases. Five

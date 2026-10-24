@@ -1,0 +1,40 @@
+flowchart TD
+    Request[POST /tickets] --> Guard{Body / time / concurrency limits}
+    Guard -->|Rejected| Error[408 / 413 / 503 - Retry-After on 503]
+    Guard -->|Admitted| Input{Validate request fields}
+    Input -->|Invalid| Invalid[422 with bounded safe details]
+    Input -->|Valid| Start[Temporal Start: ticket/id]
+    Start -->|Duplicate| Existing[202: original execution unchanged]
+    Start -->|New| Decide[Activity: model proposes a decision]
+    Decide <-->|Read-only customer-scoped calls| Tools[Customer / invoices / knowledge base]
+    Decide -->|429 / transient failure| Retry[Temporal retry budget and Retry-After]
+    Retry --> Decide
+    Decide -->|Valid bounded JSON| Policy[Activity: trusted policy validation]
+    Decide -->|Permanent error / exhausted retries| Escalate[Escalate]
+    Policy --> Choice{Permitted action}
+    Choice -->|Unsafe proposal| Escalate
+    Choice -->|Reply / close / escalate| Act
+    Choice -->|Refund| Approval{Human approval within 24 hours}
+    Human[Human reviewer] --> Update[HTTP approval: Temporal Update + validator]
+    Update --> Approval
+    Approval -->|Approve| Act
+    Approval -->|Reject / timeout| Escalate
+    Escalate --> Act
+    Act[Activity: stable action idempotency key] --> Receipt{SQLite receipt exists}
+    Receipt -->|Same key and payload| Reuse[Return original receipt]
+    Receipt -->|Different payload| Failed[step = failed]
+    Receipt -->|New key| Commit[Atomic fake effect + receipt]
+    Commit -->|Transient error: bounded retry| Act
+    Commit -->|Retry budget exhausted| Failed
+    Commit -->|Committed| Done[step = completed]
+    Reuse --> Done
+    Done --> View[Bounded state and legacy-safe projection]
+    Failed --> View
+    View --> Read[GET state: Query when active / persisted result when closed]
+
+    classDef durable fill:#e9f2ff,stroke:#2563eb,color:#102a43
+    classDef safety fill:#edf9ef,stroke:#24834a,color:#103a24
+    classDef failure fill:#fff0ed,stroke:#c24132,color:#682319
+    class Start,Retry,Approval,Update durable
+    class Guard,Input,Policy,Act,Receipt,Commit,View safety
+    class Error,Invalid,Failed failure

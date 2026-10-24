@@ -1,0 +1,50 @@
+{
+  "injection": "synthetic oversized provider, no live model calls",
+  "results": [
+    {
+      "message_characters": 1000,
+      "temporal_status": "COMPLETED",
+      "query_step": "completed",
+      "action": "reply",
+      "serialized_state_bytes": 3700,
+      "workflow_task_failures": [],
+      "effect_count": 1
+    },
+    {
+      "message_characters": 16384,
+      "temporal_status": "COMPLETED",
+      "query_step": "completed",
+      "action": "reply",
+      "serialized_state_bytes": 49855,
+      "workflow_task_failures": [],
+      "effect_count": 1
+    },
+    {
+      "message_characters": 16385,
+      "temporal_status": "COMPLETED",
+      "query_step": "completed",
+      "action": "escalate",
+      "serialized_state_bytes": 17141,
+      "workflow_task_failures": [],
+      "effect_count": 1
+    },
+    {
+      "message_characters": 800000,
+      "temporal_status": "COMPLETED",
+      "query_step": "completed",
+      "action": "escalate",
+      "serialized_state_bytes": 681,
+      "workflow_task_failures": [],
+      "effect_count": 1
+    },
+    {
+      "message_characters": 2200000,
+      "temporal_status": "COMPLETED",
+      "query_step": "completed",
+      "action": "escalate",
+      "serialized_state_bytes": 684,
+      "workflow_task_failures": [],
+      "effect_count": 1
+    }
+  ]
+}

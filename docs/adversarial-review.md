@@ -1,3 +1,5 @@
+> Historical pre-fix baseline. See [fixes and current verification](fixes.md) for the 2026-10-24 resolution.
+
 # Adversarial review, 2026-10-23
 
 Target: handoff commit `cfb50f7`. This stage adds reproductions and boundary tests;

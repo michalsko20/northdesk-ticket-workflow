@@ -2,17 +2,26 @@
 
 A small support backend using FastAPI, Temporal and an agent with read-only tools. Refunds are checked in code and wait for human approval. Workflow history survives worker restarts; fake Helpdesk effects survive retries and process restarts.
 
+[Polski szybki start](README.pl.md) · [Flowchart and design review](docs/architecture.md) · [Fix verification](docs/fixes.md)
+
 ## Run
 
 Requires Docker with Compose. No API key or local Python installation is needed for the service or test suite.
 
 ```bash
-docker compose up --build -d --wait
+LLM_MODE=fake HELPDESK_FAILURE_RATE=0 docker compose up --build -d --wait
 ```
 
 - API and Swagger: <http://localhost:8000/docs>
 - Temporal UI: <http://localhost:8233>
 - Readiness: <http://localhost:8000/health/ready>
+- Recent workflow/activity pollers: <http://localhost:8000/health/worker>
+
+Run all seven examples in a fresh demonstration, explicitly approving simulated refunds:
+
+```bash
+python3 scripts/demo.py --suffix=-demo-$(date +%s) --approve-refunds
+```
 
 The default is `LLM_MODE=fake`. `.env` is optional; `.env.example` lists the settings. Ports bind to localhost. API and worker use the same application image and run as an unprivileged user. Temporal's local dev server also runs without root. Named volumes preserve Temporal history and fake Helpdesk actions.
 
@@ -40,7 +49,7 @@ This returns HTTP 202 and `{"ticket_id":"T-1","workflow_id":"ticket/T-1","duplic
 curl -sS http://localhost:8000/tickets/T-1
 ```
 
-The response includes `step`, `proposal`, `decision`, `approval`, `approval_deadline`, `result`, and `error`. The proposal is the model output; the decision is the validated action, possibly replaced by escalation. A completed reply includes KB-1 and its password instructions.
+The response includes `step`, `proposal`, `decision`, `approval`, `approval_deadline`, `result`, `error`, and `payload_warning`. The proposal is bounded model output; the decision is the validated action, possibly replaced by escalation. A completed reply includes KB-1 and its password instructions. `payload_warning` is normally null; it explains omitted unsafe/oversized legacy text while preserving the recorded action and receipt identity.
 
 Create a refund ticket:
 
@@ -68,9 +77,14 @@ Set `approved` to `false` to reject. Rejection or no response within 24 hours pr
 | 202 | Ticket start accepted, or existing workflow returned |
 | 200 | State read, or approval recorded |
 | 404 | Ticket does not exist |
+| 408 | Request body did not arrive within its time budget |
 | 409 | Approval is premature, conflicting, expired, or the workflow is closed |
+| 413 | Raw request body exceeds its byte budget, including chunked bodies |
 | 422 | Invalid request shape or field value |
-| 503 / 504 | Backend unavailable / request timed out |
+| 503 | Backend unavailable, or bounded admission/query capacity is busy |
+| 504 | Temporal operation exceeded its time budget |
+
+A capacity rejection includes `Retry-After: 1` and happens before that operation is dispatched. Respect it and reuse the ticket ID. The demo/load scripts implement bounded retries for these explicit admission rejections. A transport timeout on approval remains ambiguous: read status before deciding whether to retry.
 
 After an HTTP timeout, read state before retrying an approval: the server may have recorded it. The first recorded approval is binding. Identical repeats are harmless while the execution remains open; a closed execution returns 409.
 
@@ -82,6 +96,8 @@ docker compose restart worker                       # pending state survives
 python3 scripts/demo.py --approve-refunds             # explicitly act as the human
 python3 scripts/demo.py --suffix=-second --approve-refunds
 ```
+
+The per-ticket demo wait budget defaults to 480 seconds to cover bounded model and delivery retries; use `--timeout-seconds 60` for a shorter smoke run. The script still returns immediately when a ticket settles or waits for an approval you have not requested it to supply.
 
 | Example | Fake mode policy |
 | --- | --- |
@@ -100,6 +116,14 @@ One command builds the test image and runs Ruff lint, Ruff format checking, mypy
 ```bash
 make test
 ```
+
+The three wall-clock activity timeout tests are opt-in (about seven minutes sequentially). They were also run separately after the fixes:
+
+```bash
+docker compose --profile test run --rm --no-deps -e RUN_SLOW_TIMEOUT_TESTS=1 tests pytest tests/slow/test_activity_timeouts.py -q
+```
+
+All former expected-failure reproductions are ordinary passing regression tests. Historical reports under `docs/review-artifacts` describe the pre-fix version; current evidence is under `docs/fix-artifacts`.
 
 Equivalent without Make:
 
@@ -136,15 +160,16 @@ GitHub Actions runs the same container command on every push and pull request. C
 
 ## Architecture
 
-Additional review evidence: [corner-case matrix](docs/review-matrix.md),
-[known findings](docs/adversarial-review.md), [load/limit checks and operating practices](docs/limits-review.md),
-and [browser E2E screenshots](docs/review-artifacts/e2e/README.md). Known defects
-have strict expected-failure reproductions; they are not counted as passing tests.
+The [architecture review](docs/architecture.md) explains ownership, sources, and history compatibility.
+The [fix report](docs/fixes.md) maps all eight findings to the repair and its verification.
+Earlier [corner-case](docs/review-matrix.md) and [load](docs/limits-review.md) reports remain historical evidence.
+
+[![Ticket processing flow](docs/architecture.png)](docs/architecture.svg)
 
 ```mermaid
 flowchart LR
     Client --> API[FastAPI]
-    API -->|Start / Query / Update| Temporal[Temporal history and timers]
+    API -->|Start / Update / active Query / closed result| Temporal[Temporal history and timers]
     Worker -->|Poll task queue| Temporal
     Worker --> Decide[Decide activity]
     Decide --> LLM[Fake, OpenAI or GLM provider]
@@ -161,7 +186,7 @@ The workflow runs `decide → validate → [wait for refund approval] → act`. 
 
 Activities contain network calls, catalog reads and random failures. The workflow contains only deterministic orchestration and Temporal time. The validation activity obtains invoice facts from the trusted catalog, then calls the pure policy function. This keeps file/data access outside replay while leaving business rules independently testable.
 
-Waiting uses a durable Temporal timer, so it occupies no dedicated process and survives restarts. State reads use a [Query](https://docs.temporal.io/encyclopedia/workflow-message-passing); approvals use a synchronous Update whose validator checks state and deadline inside the workflow. This avoids a separate HTTP read-then-signal race. Querying retained completed workflows is supported but still requires a polling worker.
+Waiting uses a durable Temporal timer, so it occupies no dedicated process and survives restarts. Active state reads use a [Query](https://docs.temporal.io/encyclopedia/workflow-message-passing); completed tickets read their persisted result and remain readable without a polling worker. Approvals use a synchronous Update whose validator checks state and deadline inside the workflow. This avoids a separate HTTP read-then-signal race. Abnormally closed executions report a failed state with the closure reason.
 
 ## Agent and rules
 
@@ -204,7 +229,7 @@ For T-6, the fake deliberately proposes EUR 5000. The validator escalates it bef
 | Validate | 3 | 10 seconds | 30 seconds |
 | Helpdesk action | 5 | 15 seconds | 2 minutes |
 
-Transient failures use exponential backoff. Provider connection errors, HTTP 408/429/5xx and simulated Helpdesk failures are retryable. Unknown customers, forbidden tool calls, configuration/authentication errors and idempotency conflicts are non-retryable. Unreadable model responses have at most three activity attempts, then escalate. Provider SDK retries are disabled, so budgets do not multiply invisibly. [Temporal retries activities with at-least-once execution](https://docs.temporal.io/develop/python/best-practices/error-handling); retries alone do not guarantee a single external effect.
+Transient failures use exponential backoff. Provider connection errors, HTTP 408/409/429/5xx and simulated Helpdesk failures are retryable. Valid provider `Retry-After` (seconds, milliseconds, or HTTP date) becomes Temporal's `next_retry_delay`; a requested wait beyond the five-minute activity schedule budget escalates without premature retry. Unknown customers, forbidden/malformed tool calls, unsafe/oversized proposals, configuration/authentication errors and idempotency conflicts are non-retryable. Unreadable model responses have at most three activity attempts, then escalate. SDK retries are disabled, so budgets do not multiply invisibly. [Temporal retries activities with at-least-once execution](https://docs.temporal.io/develop/python/best-practices/error-handling); retries alone do not guarantee a single external effect.
 
 Start deduplication uses workflow ID `ticket/{ticket_id}` and `REJECT_DUPLICATE`, with the already-started error mapped to the existing workflow. It does not use a racy existence check. Both running and completed executions are covered within namespace retention. After retained history is deleted, a separate durable ticket registry would be needed to enforce start deduplication forever.
 
@@ -216,6 +241,51 @@ The database row is the fake side effect, so it can be atomic with its receipt. 
 
 Application logs are JSON lines. API, workflow and activity ticket events carry `ticket_id` and `workflow_id`; activity events carry `attempt`. Workflow logging suppresses replay duplicates. Ticket text and API keys are not explicitly logged. Infrastructure startup/shutdown events naturally have no ticket ID.
 
+## Runtime limits and health
+
+These runtime settings can be exported or placed in the ignored `.env`. Recreate API/worker containers with `docker compose up --build -d --wait` after changing settings.
+
+| Setting | Default | Purpose |
+| --- | --- | --- |
+| `HTTP_MAX_BODY_BYTES` | 262144 | Raw body bytes before JSON parsing; counts chunked bodies too |
+| `HTTP_BODY_TIMEOUT_SECONDS` | 10 | Time allowed to receive a request body |
+| `HTTP_MAX_INFLIGHT` | 32 | Admitted business requests per API process |
+| `HTTP_QUERY_CONCURRENCY` | 4 | Concurrent worker-dependent active state Queries |
+| `HTTP_QUERY_TIMEOUT_SECONDS` | 1 | Active Query wait before a retryable busy response |
+| `WORKER_ACTIVITY_CONCURRENCY` | 10 | Activity slots per worker |
+| `WORKER_WORKFLOW_CONCURRENCY` | 16 | Workflow/query task slots and executor bound |
+| `WORKER_MAX_CACHED_WORKFLOWS` | 512 | Explicit workflow cache bound |
+
+Domain byte budgets are code-level policy: a proposal is at most 64 KiB, a reply/reason at most 16 KiB, provider continuation output at most 128 KiB, tool arguments at most 16 KiB, and a reply has at most 16 article references. Invalid output escalates before an effect. Historical state reads omit unsafe/large audit text with `payload_warning`; action and receipt identity remain intact.
+
+An active Query that cannot be served within its short budget returns 503 with Retry-After. Completed results use the history read path instead. This is explicit load shedding, not a promise that every active state read is immediately available during a burst.
+
+`/health/live` reports HTTP process availability. `/health/ready` checks Temporal connectivity, so starts can remain available while a worker is offline. `/health/worker` checks recent pollers for both workflow and activity queues (120-second freshness window); it is a recent-poller diagnostic, not a guarantee of zero queue delay. Health routes bypass business admission slots. Query latency, backlog age and provider quotas still need monitoring in production.
+
+### Repeat the isolated limit checks
+
+```bash
+docker compose -p northdesk-limits -f docker-compose.yml -f tests/limits/compose.yml up --build -d --wait
+uv run --locked python scripts/load_check.py --concurrency 200 --tickets 500 --burst 1000
+uv run --locked python scripts/request_size_check.py
+uv run --locked python scripts/payload_check.py
+docker compose -p northdesk-limits -f docker-compose.yml -f tests/limits/compose.yml down
+```
+
+This uses ports 8002/7235/8235, its own volumes and fake mode with empty keys. Results go to ignored `artifacts/` by default. The load client respects admission Retry-After and reports those 503 responses separately from unexpected errors. Measurements are local evidence, not a production capacity guarantee.
+
+### Troubleshooting
+
+| Symptom | Check |
+| --- | --- |
+| Stack does not become healthy | `docker compose logs api worker temporal`; check port conflicts and model configuration |
+| Old decision appears after resubmission | The ticket ID already exists; use a fresh suffix for a new demonstration |
+| 503 with Retry-After | Capacity is bounded; wait and retry the same logical request/ID |
+| Ticket stays at `deciding` / active reads fail | Check worker pollers, worker logs, provider connectivity and quotas |
+| `awaiting_approval` | Send an explicit approval/rejection, or let the 24-hour timer expire |
+| `step=failed` | Delivery did not confirm success; inspect error/receipt before manual reconciliation |
+| `payload_warning` is present | An old unsafe/large field was omitted from the view; the effect was not rewritten |
+
 ## Azure deployment proposal
 
 This repository runs locally; the following is the production design, not deployed infrastructure.
@@ -224,7 +294,7 @@ This repository runs locally; the following is the production design, not deploy
 | --- | --- |
 | Images | Azure Container Registry, built once in CI and promoted by digest |
 | HTTP API | Azure Container Apps with HTTPS ingress and an authenticated operator role for approvals |
-| Workers | A separate Container App with no public ingress and at least one replica, polling Temporal |
+| Workers | A separate Container App with no public ingress; at least two production replicas for shared always-on queues |
 | Temporal | AKS using the official Temporal Helm chart with external Azure Database for PostgreSQL, durable/visibility schemas, TLS and backups |
 | LLM | Azure OpenAI deployment supporting Responses/tool calling, with an Azure endpoint and Entra token adapter |
 | Secrets | Azure Key Vault, accessed through workload Managed Identity; per-component least-privilege RBAC |
@@ -232,7 +302,7 @@ This repository runs locally; the following is the production design, not deploy
 
 This version's real adapter targets OpenAI directly. Azure deployment requires wiring its base URL and token provider; the [Azure Responses API](https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses?view=foundry-classic) documents that authentication flow. Replace the fake Helpdesk with the real API and its idempotency contract, and use shared PostgreSQL for durable receipts if required. Do not mount a separate local SQLite database on each scaled worker.
 
-API replicas scale on HTTP concurrency. Worker replicas have a minimum of one because HTTP-based scaling cannot observe their polling work. Start with bounded activity concurrency (currently ten), then scale using task-queue backlog and schedule-to-start latency while respecting model quotas. A large number of tickets waiting for approval does not itself require more workers. [Container Apps scaling](https://learn.microsoft.com/en-us/azure/container-apps/scale-app) and [Managed Identity](https://learn.microsoft.com/en-us/azure/container-apps/managed-identity) support these deployment choices.
+API replicas scale on HTTP concurrency. Production worker replicas have a minimum of two for availability because HTTP-based scaling cannot observe their polling work; they require shared effect persistence before scaling across hosts. Activity slots, workflow slots and cache are independently bounded (see runtime settings), then adjusted using backlog and schedule-to-start latency while respecting model quotas. A large number of tickets waiting for approval does not itself require more workers. [Container Apps scaling](https://learn.microsoft.com/en-us/azure/container-apps/scale-app) and [Managed Identity](https://learn.microsoft.com/en-us/azure/container-apps/managed-identity) support these deployment choices.
 
 For an all-Azure deployment, operate Temporal's frontend/history/matching/internal-worker services on AKS with HA PostgreSQL, migration procedures, retention policy and restore tests. Configure private networking between Container Apps, AKS and data services. The local CLI dev server is not a production topology. The [official Helm chart](https://github.com/temporalio/helm-charts) is the starting point, not a complete production policy. Temporal Cloud is an alternative that reduces operational work, but hosting workers in Azure does not imply that the Temporal service itself is Azure-hosted.
 

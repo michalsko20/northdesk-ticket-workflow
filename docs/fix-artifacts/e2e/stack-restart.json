@@ -1,0 +1,61 @@
+{
+  "checks": [
+    "completed refund remains readable after Temporal/API/worker restart"
+  ],
+  "ticket": "pw-restart-mvm8ex9h",
+  "result": {
+    "ticket_id": "pw-restart-mvm8ex9h",
+    "workflow_id": "ticket/pw-restart-mvm8ex9h",
+    "step": "completed",
+    "proposal": {
+      "action": "refund",
+      "amount_eur": "49.0",
+      "articles": [],
+      "category": "billing",
+      "invoice_id": "INV-1002",
+      "message": null,
+      "priority": "normal",
+      "reason": null
+    },
+    "decision": {
+      "category": "billing",
+      "priority": "normal",
+      "action": "refund",
+      "message": null,
+      "articles": [],
+      "invoice_id": "INV-1002",
+      "amount_eur": "49.00",
+      "reason": null
+    },
+    "approval": {
+      "approved": true,
+      "reviewer": "playwright-reviewer"
+    },
+    "approval_deadline": "2026-10-25T10:04:18.142949+00:00",
+    "result": {
+      "action": "refund",
+      "action_id": "879a16bf428f07e7ecfb",
+      "details": {
+        "action": "refund",
+        "amount_eur": "49.00",
+        "articles": [],
+        "category": "billing",
+        "invoice_id": "INV-1002",
+        "message": null,
+        "priority": "normal",
+        "reason": null
+      },
+      "ticket_id": "pw-restart-mvm8ex9h"
+    },
+    "error": null,
+    "payload_warning": null
+  },
+  "screenshots": [
+    "17-after-full-stack-restart.png"
+  ],
+  "browserErrors": [],
+  "closed_read_with_worker_stopped": {
+    "http_status": 200,
+    "same_receipt": true
+  }
+}

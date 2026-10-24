@@ -1,0 +1,44 @@
+{
+  "checks": [
+    "exhausted Helpdesk retries report failed without claiming delivery"
+  ],
+  "ticket": "pw-delivery-failed-mvm8fhz8",
+  "result": {
+    "ticket_id": "pw-delivery-failed-mvm8fhz8",
+    "workflow_id": "ticket/pw-delivery-failed-mvm8fhz8",
+    "step": "failed",
+    "proposal": {
+      "action": "reply",
+      "amount_eur": null,
+      "articles": [
+        "KB-1"
+      ],
+      "category": "account",
+      "invoice_id": null,
+      "message": "Open the sign-in page, choose 'Forgot password' and follow the link we email you. The link works for 30 minutes.",
+      "priority": "normal",
+      "reason": null
+    },
+    "decision": {
+      "category": "account",
+      "priority": "normal",
+      "action": "reply",
+      "message": "Open the sign-in page, choose 'Forgot password' and follow the link we email you. The link works for 30 minutes.",
+      "articles": [
+        "KB-1"
+      ],
+      "invoice_id": null,
+      "amount_eur": null,
+      "reason": null
+    },
+    "approval": null,
+    "approval_deadline": null,
+    "result": null,
+    "error": "action_failed:TemporaryHelpdeskError",
+    "payload_warning": null
+  },
+  "screenshots": [
+    "16-helpdesk-retries-exhausted.png"
+  ],
+  "browserErrors": []
+}

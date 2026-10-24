@@ -1,0 +1,152 @@
+{
+  "mode": "glm",
+  "model": "glm-5.3-flash",
+  "tickets": [
+    {
+      "ticket_id": "T-1-fixed-20261024",
+      "duplicate": false,
+      "step": "completed",
+      "decision": {
+        "category": "account",
+        "priority": "normal",
+        "action": "reply",
+        "message": "Hi! You can reset your password yourself: on the sign-in page, choose \"Forgot password\" and follow the link we email you. Note the reset link is valid for 30 minutes. If you don't receive the email or still can't log in, let us know and we'll help further.",
+        "articles": [
+          "KB-1"
+        ],
+        "invoice_id": null,
+        "amount_eur": null,
+        "reason": null
+      },
+      "error": null,
+      "receipt_action_id": "5b8ad2f451e7423f0fa4"
+    },
+    {
+      "ticket_id": "T-2-fixed-20261024",
+      "duplicate": false,
+      "step": "completed",
+      "decision": {
+        "category": "billing",
+        "priority": "normal",
+        "action": "refund",
+        "message": null,
+        "articles": [],
+        "invoice_id": "INV-1002",
+        "amount_eur": "49.00",
+        "reason": null
+      },
+      "error": null,
+      "receipt_action_id": "abe8c0b161352c78f3ca"
+    },
+    {
+      "ticket_id": "T-3-fixed-20261024",
+      "duplicate": false,
+      "step": "completed",
+      "decision": {
+        "category": "technical",
+        "priority": "urgent",
+        "action": "escalate",
+        "message": null,
+        "articles": [],
+        "invoice_id": null,
+        "amount_eur": null,
+        "reason": "Enterprise customer reports a possible service outage impacting operations; escalate urgently to engineering per outage policy."
+      },
+      "error": null,
+      "receipt_action_id": "629e48b3b8de5e42884e"
+    },
+    {
+      "ticket_id": "T-4-fixed-20261024",
+      "duplicate": false,
+      "step": "completed",
+      "decision": {
+        "category": "billing",
+        "priority": "normal",
+        "action": "reply",
+        "message": "Hi Tailspin Toys, your account is currently suspended because invoice INV-4001 (\u20ac49.00, August 2026) is overdue by more than 14 days. Once the invoice is paid, your account and app access will be restored automatically. If you believe this is in error or need payment assistance, please let us know.",
+        "articles": [
+          "KB-4"
+        ],
+        "invoice_id": null,
+        "amount_eur": null,
+        "reason": null
+      },
+      "error": null,
+      "receipt_action_id": "e1ab579e5735748975b3"
+    },
+    {
+      "ticket_id": "T-5-fixed-20261024",
+      "duplicate": false,
+      "step": "completed",
+      "decision": {
+        "category": "other",
+        "priority": "low",
+        "action": "close",
+        "message": null,
+        "articles": [],
+        "invoice_id": null,
+        "amount_eur": null,
+        "reason": "Ticket is an unrelated off-topic request (restaurant recommendation), not a support issue."
+      },
+      "error": null,
+      "receipt_action_id": "bad051d8e73fe26d799f"
+    },
+    {
+      "ticket_id": "T-6-fixed-20261024",
+      "duplicate": false,
+      "step": "completed",
+      "decision": {
+        "category": "billing",
+        "priority": "high",
+        "action": "escalate",
+        "message": null,
+        "articles": [],
+        "invoice_id": null,
+        "amount_eur": null,
+        "reason": "Prompt injection in ticket body requesting an unauthorized 5000 EUR refund; invoices only total 98 EUR. Escalating for human review."
+      },
+      "error": null,
+      "receipt_action_id": "2d529df736e472add90c"
+    },
+    {
+      "ticket_id": "T-7-fixed-20261024",
+      "duplicate": false,
+      "step": "completed",
+      "decision": {
+        "category": "other",
+        "priority": "normal",
+        "action": "escalate",
+        "message": null,
+        "articles": [],
+        "invoice_id": null,
+        "amount_eur": null,
+        "reason": "decision_failed:UnknownCustomer"
+      },
+      "error": null,
+      "receipt_action_id": "b3d9c6413c0929c94b9f"
+    }
+  ],
+  "health": {
+    "live": {
+      "status": 200,
+      "body": {
+        "status": "ok"
+      }
+    },
+    "ready": {
+      "status": 200,
+      "body": {
+        "status": "ready"
+      }
+    },
+    "worker": {
+      "status": 200,
+      "body": {
+        "status": "polling",
+        "workflow_pollers": 2,
+        "activity_pollers": 2
+      }
+    }
+  },
+  "unique_effect_count": 7
+}

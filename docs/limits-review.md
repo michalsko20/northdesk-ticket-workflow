@@ -1,3 +1,5 @@
+> Historical pre-fix baseline. See [fixes and current verification](fixes.md) for the 2026-10-24 resolution.
+
 # Limits and operating practices, 2026-10-23
 
 The additional checks found three issues: final workflow payload growth (F6),
