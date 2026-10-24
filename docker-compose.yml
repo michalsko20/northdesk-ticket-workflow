@@ -6,6 +6,18 @@ x-app: &app
     context: .
     target: runtime
   init: true
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+  read_only: true
+  tmpfs:
+    - /tmp:size=64m,mode=0700,uid=10001,gid=10001
+  deploy:
+    resources:
+      limits:
+        cpus: "2.0"
+        memory: 512M
   environment: &env
     TEMPORAL_ADDRESS: temporal:7233
     TEMPORAL_NAMESPACE: default
@@ -18,6 +30,14 @@ x-app: &app
     ZAI_API_KEY: ${ZAI_API_KEY:-}
     HELPDESK_FAILURE_RATE: ${HELPDESK_FAILURE_RATE:-0.2}
     HELPDESK_DB_PATH: /state/helpdesk.db
+    HTTP_MAX_BODY_BYTES: ${HTTP_MAX_BODY_BYTES:-262144}
+    HTTP_MAX_INFLIGHT: ${HTTP_MAX_INFLIGHT:-32}
+    HTTP_QUERY_CONCURRENCY: ${HTTP_QUERY_CONCURRENCY:-4}
+    HTTP_QUERY_TIMEOUT_SECONDS: ${HTTP_QUERY_TIMEOUT_SECONDS:-1}
+    HTTP_BODY_TIMEOUT_SECONDS: ${HTTP_BODY_TIMEOUT_SECONDS:-10}
+    WORKER_ACTIVITY_CONCURRENCY: ${WORKER_ACTIVITY_CONCURRENCY:-10}
+    WORKER_WORKFLOW_CONCURRENCY: ${WORKER_WORKFLOW_CONCURRENCY:-16}
+    WORKER_MAX_CACHED_WORKFLOWS: ${WORKER_MAX_CACHED_WORKFLOWS:-512}
   depends_on:
     temporal:
       condition: service_healthy
@@ -29,8 +49,15 @@ services:
     ports:
       - "127.0.0.1:7233:7233"
       - "127.0.0.1:8233:8233"
+    security_opt:
+      - no-new-privileges:true
     volumes:
       - temporal-data:/home/temporal
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 512M
     healthcheck:
       test: ["CMD", "temporal", "operator", "cluster", "health", "--address", "127.0.0.1:7233"]
       interval: 3s
@@ -52,6 +79,8 @@ services:
     command: ["python", "-m", "northdesk.worker"]
     volumes:
       - helpdesk-data:/state
+    tmpfs:
+      - /tmp:size=64m,mode=0700,uid=10001,gid=10001
     stop_grace_period: 30s
 
   tests:
@@ -61,6 +90,13 @@ services:
       context: .
       target: tests
     network_mode: none
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp:size=256m,mode=0700,uid=10001,gid=10001
     environment:
       LLM_MODE: fake
       HELPDESK_FAILURE_RATE: "0"

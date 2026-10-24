@@ -1,0 +1,18 @@
+{
+  "injection": "synthetic oversized provider, no live model calls",
+  "results": [
+    {
+      "message_characters": 800000,
+      "temporal_status": "RUNNING",
+      "query_error": "RPCError",
+      "workflow_task_failures": [
+        {
+          "cause": 37,
+          "message": "[TMPRL1103] Attempted to upload payloads with size that exceeded the error limit."
+        }
+      ],
+      "effect_count": 1,
+      "cleanup": "synthetic running execution terminated"
+    }
+  ]
+}

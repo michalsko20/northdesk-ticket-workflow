@@ -1,0 +1,3339 @@
+{
+  "profile": "isolated fake mode, one worker, activity concurrency 10",
+  "base_url": "http://127.0.0.1:8002",
+  "suffix": "313230217000",
+  "success": true,
+  "phases": [
+    {
+      "label": "c1",
+      "requests": 150,
+      "concurrency": 1,
+      "unique_tickets": 150,
+      "success": true,
+      "submission_seconds": 4.711,
+      "submission_requests_per_second": 31.84,
+      "settled_seconds": 8.576,
+      "submission_latency": {
+        "p50_ms": 30.53,
+        "p95_ms": 49.71,
+        "p99_ms": 60.77
+      },
+      "http_statuses": {
+        "202": 150
+      },
+      "duplicate_flags": {
+        "False": 150
+      },
+      "query_errors": {},
+      "failures": [],
+      "pending": [],
+      "completed": {
+        "limit-313230217000-c1-49": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-99": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-107": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-12": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-44": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-37": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-95": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-52": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-92": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-125": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-40": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-43": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-127": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-77": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-87": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-18": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-132": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-123": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-86": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-109": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-76": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-29": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-19": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-120": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-71": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-82": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-105": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-131": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-38": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-118": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-96": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-78": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-133": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-48": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-10": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-31": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-62": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-124": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-6": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-11": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-83": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-134": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-148": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-1": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-55": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-30": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-33": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-91": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-23": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-130": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-8": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-54": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-17": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-84": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-53": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-32": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-103": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-47": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-79": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-36": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-46": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-9": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-126": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-72": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-89": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-16": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-85": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-5": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-93": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-138": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-80": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-28": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-45": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-15": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-146": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-142": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-100": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-114": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-147": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-42": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-59": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-149": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-57": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-41": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-137": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-136": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-61": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-111": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-68": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-102": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-128": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-135": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-108": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-65": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-63": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-50": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-73": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-97": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-141": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-110": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-22": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-56": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-0": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-35": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-113": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-74": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-21": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-26": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-60": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-66": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-98": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-116": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-13": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-70": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-69": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-75": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-145": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-20": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-129": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-7": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-122": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-112": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-24": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-104": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-106": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-117": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-34": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-81": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-101": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-67": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-140": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-2": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-4": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-143": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-64": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-90": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-3": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-121": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-94": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-27": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-39": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-25": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-51": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-14": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-139": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-144": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-58": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-88": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-115": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c1-119": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        }
+      },
+      "all_http_operations_succeeded": true
+    },
+    {
+      "label": "c10",
+      "requests": 150,
+      "concurrency": 10,
+      "unique_tickets": 150,
+      "success": true,
+      "submission_seconds": 1.001,
+      "submission_requests_per_second": 149.88,
+      "settled_seconds": 6.245,
+      "submission_latency": {
+        "p50_ms": 62.48,
+        "p95_ms": 94.66,
+        "p99_ms": 115.46
+      },
+      "http_statuses": {
+        "202": 150
+      },
+      "duplicate_flags": {
+        "False": 150
+      },
+      "query_errors": {},
+      "failures": [],
+      "pending": [],
+      "completed": {
+        "limit-313230217000-c10-36": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-4": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-48": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-115": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-29": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-13": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-57": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-56": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-128": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-87": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-43": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-9": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-146": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-50": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-61": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-123": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-2": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-34": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-149": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-83": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-112": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-54": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-138": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-26": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-120": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-22": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-100": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-93": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-102": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-78": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-7": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-47": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-136": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-141": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-1": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-76": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-103": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-79": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-27": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-5": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-111": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-46": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-84": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-127": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-124": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-108": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-66": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-77": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-118": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-52": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-31": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-20": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-101": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-82": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-67": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-12": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-90": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-68": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-44": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-10": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-88": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-62": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-53": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-37": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-70": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-71": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-96": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-49": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-38": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-15": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-0": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-51": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-33": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-32": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-75": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-114": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-81": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-89": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-28": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-17": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-132": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-95": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-106": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-147": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-129": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-109": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-119": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-94": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-16": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-99": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-6": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-45": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-139": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-8": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-14": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-137": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-122": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-40": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-35": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-80": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-125": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-144": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-18": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-24": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-130": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-59": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-30": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-104": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-23": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-60": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-11": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-98": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-42": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-86": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-64": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-143": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-25": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-72": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-39": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-63": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-65": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-145": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-97": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-19": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-91": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-92": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-55": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-131": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-121": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-21": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-105": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-69": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-135": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-3": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-107": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-74": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-133": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-116": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-142": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-140": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-58": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-73": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-113": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-117": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-110": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-41": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-85": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-148": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-126": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c10-134": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        }
+      },
+      "all_http_operations_succeeded": true
+    },
+    {
+      "label": "c50",
+      "requests": 150,
+      "concurrency": 50,
+      "unique_tickets": 150,
+      "success": true,
+      "submission_seconds": 1.043,
+      "submission_requests_per_second": 143.75,
+      "settled_seconds": 7.303,
+      "submission_latency": {
+        "p50_ms": 331.39,
+        "p95_ms": 360.61,
+        "p99_ms": 386.93
+      },
+      "http_statuses": {
+        "202": 150
+      },
+      "duplicate_flags": {
+        "False": 150
+      },
+      "query_errors": {},
+      "failures": [],
+      "pending": [],
+      "completed": {
+        "limit-313230217000-c50-13": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-22": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-20": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-31": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-25": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-29": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-19": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-8": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-75": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-70": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-9": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-48": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-118": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-40": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-81": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-132": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-46": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-3": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-60": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-106": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-139": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-18": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-62": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-54": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-66": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-1": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-4": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-68": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-45": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-6": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-107": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-123": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-69": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-30": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-23": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-83": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-21": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-49": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-16": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-36": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-17": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-0": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-145": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-5": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-15": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-32": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-56": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-7": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-109": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-11": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-93": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-80": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-133": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-144": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-47": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-26": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-142": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-79": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-101": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-72": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-41": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-65": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-51": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-67": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-53": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-103": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-77": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-92": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-99": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-108": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-87": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-105": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-130": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-134": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-35": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-136": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-43": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-14": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-104": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-28": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-121": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-64": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-89": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-91": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-2": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-140": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-39": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-85": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-116": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-61": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-42": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-143": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-57": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-82": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-112": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-113": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-52": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-73": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-55": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-125": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-78": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-74": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-141": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-27": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-34": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-71": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-24": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-126": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-124": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-50": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-38": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-137": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-88": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-131": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-114": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-127": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-111": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-76": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-97": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-138": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-86": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-98": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-120": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-90": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-96": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-146": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-122": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-59": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-135": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-58": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-115": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-33": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-119": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-148": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-117": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-110": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-129": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-94": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-44": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-63": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-37": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-149": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-95": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-102": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-128": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-100": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-10": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-147": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-84": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c50-12": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        }
+      },
+      "all_http_operations_succeeded": true
+    },
+    {
+      "label": "c100",
+      "requests": 150,
+      "concurrency": 100,
+      "unique_tickets": 150,
+      "success": true,
+      "submission_seconds": 1.488,
+      "submission_requests_per_second": 100.84,
+      "settled_seconds": 7.81,
+      "submission_latency": {
+        "p50_ms": 626.8,
+        "p95_ms": 1299.73,
+        "p99_ms": 1400.51
+      },
+      "http_statuses": {
+        "202": 150
+      },
+      "duplicate_flags": {
+        "False": 150
+      },
+      "query_errors": {},
+      "failures": [],
+      "pending": [],
+      "completed": {
+        "limit-313230217000-c100-0": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-7": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-3": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-24": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-11": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-52": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-37": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-15": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-72": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-2": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-22": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-31": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-4": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-73": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-1": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-6": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-8": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-107": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-59": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-79": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-85": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-83": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-80": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-45": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-9": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-110": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-56": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-70": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-145": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-44": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-112": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-86": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-16": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-40": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-118": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-141": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-64": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-105": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-135": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-96": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-25": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-144": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-53": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-28": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-142": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-75": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-130": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-61": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-21": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-93": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-20": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-119": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-147": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-33": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-94": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-47": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-30": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-35": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-46": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-128": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-116": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-117": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-29": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-134": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-100": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-18": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-5": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-36": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-74": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-50": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-138": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-23": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-136": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-54": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-60": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-121": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-92": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-65": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-12": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-39": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-137": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-26": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-58": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-27": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-82": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-90": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-113": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-123": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-114": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-111": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-108": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-127": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-103": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-63": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-62": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-19": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-34": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-66": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-99": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-106": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-32": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-91": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-76": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-101": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-148": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-71": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-129": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-17": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-143": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-120": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-146": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-115": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-109": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-68": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-43": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-98": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-10": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-14": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-139": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-126": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-131": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-67": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-97": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-89": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-133": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-84": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-57": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-41": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-77": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-104": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-132": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-13": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-102": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-81": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-55": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-49": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-42": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-69": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-51": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-124": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-149": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-88": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-78": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-125": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-38": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-87": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-95": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-140": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-122": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-c100-48": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        }
+      },
+      "all_http_operations_succeeded": true
+    },
+    {
+      "label": "duplicates",
+      "requests": 400,
+      "concurrency": 100,
+      "unique_tickets": 1,
+      "success": true,
+      "submission_seconds": 2.431,
+      "submission_requests_per_second": 164.51,
+      "settled_seconds": 2.443,
+      "submission_latency": {
+        "p50_ms": 395.87,
+        "p95_ms": 1556.82,
+        "p99_ms": 2041.98
+      },
+      "http_statuses": {
+        "202": 400
+      },
+      "duplicate_flags": {
+        "False": 1,
+        "True": 399
+      },
+      "query_errors": {},
+      "failures": [],
+      "pending": [],
+      "completed": {
+        "limit-313230217000-duplicates-0": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        }
+      },
+      "all_http_operations_succeeded": true
+    },
+    {
+      "label": "max-unicode",
+      "requests": 30,
+      "concurrency": 10,
+      "unique_tickets": 30,
+      "success": true,
+      "submission_seconds": 0.239,
+      "submission_requests_per_second": 125.38,
+      "settled_seconds": 1.676,
+      "submission_latency": {
+        "p50_ms": 72.85,
+        "p95_ms": 104.37,
+        "p99_ms": 136.03
+      },
+      "http_statuses": {
+        "202": 30
+      },
+      "duplicate_flags": {
+        "False": 30
+      },
+      "query_errors": {},
+      "failures": [],
+      "pending": [],
+      "completed": {
+        "limit-313230217000-max-unicode-1": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-4": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-8": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-14": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-5": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-13": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-2": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-0": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-12": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-19": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-3": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-9": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-21": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-24": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-22": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-15": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-6": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-17": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-10": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-20": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-25": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-16": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-7": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-23": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-11": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-28": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-27": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-26": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-18": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        },
+        "limit-313230217000-max-unicode-29": {
+          "step": "completed",
+          "action": "reply",
+          "error": null
+        }
+      },
+      "all_http_operations_succeeded": true
+    }
+  ],
+  "health": {
+    "samples": 130,
+    "statuses": {
+      "200": 130
+    },
+    "latency": {
+      "p50_ms": 1.72,
+      "p95_ms": 57.14,
+      "p99_ms": 67.73
+    }
+  },
+  "all_http_operations_succeeded": true,
+  "success_definition": "All tickets eventually complete correctly and starts deduplicate; transient query errors are reported separately"
+}

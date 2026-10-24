@@ -1,0 +1,34 @@
+[
+  {
+    "case": "max-unicode",
+    "ticket_id": "raw-743817133000-max-unicode",
+    "request_bytes": 82096,
+    "response_bytes": 114,
+    "status": 202,
+    "elapsed_ms": 48.57
+  },
+  {
+    "case": "padded",
+    "ticket_id": "raw-743817133000-padded",
+    "request_bytes": 2097266,
+    "response_bytes": 104,
+    "status": 202,
+    "elapsed_ms": 27.41
+  },
+  {
+    "case": "padded-chunked",
+    "ticket_id": "raw-743817133000-padded-chunked",
+    "request_bytes": 2097274,
+    "response_bytes": 120,
+    "status": 202,
+    "elapsed_ms": 33.76
+  },
+  {
+    "case": "invalid-large-field",
+    "ticket_id": "raw-743817133000-invalid-large-field",
+    "request_bytes": 2097264,
+    "response_bytes": 2097303,
+    "status": 422,
+    "elapsed_ms": 48.29
+  }
+]

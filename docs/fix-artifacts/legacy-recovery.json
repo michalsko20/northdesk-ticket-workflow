@@ -1,0 +1,15 @@
+{
+  "server": "real isolated Temporal dev service; original frozen worker, no emulated cap",
+  "ticket_id": "legacy-recovery-b71d366339b0",
+  "status": "COMPLETED",
+  "effect_count": 1,
+  "action_invocations": 1,
+  "action": "reply",
+  "original_receipt_preserved": true,
+  "payload_warning": "Legacy data omitted from view: proposal, decision_text, result_details",
+  "completion_payload_bytes": 662,
+  "legacy_completion_failures": [
+    "[TMPRL1103] Attempted to upload payloads with size that exceeded the error limit."
+  ],
+  "history_replayed": true
+}

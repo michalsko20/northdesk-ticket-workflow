@@ -44,7 +44,9 @@ async def main() -> None:
                 activities.validate_ticket,
                 activities.act_on_ticket,
             ],
-            max_concurrent_activities=10,
+            max_concurrent_activities=settings.worker_activity_concurrency,
+            max_concurrent_workflow_tasks=settings.worker_workflow_concurrency,
+            max_cached_workflows=settings.worker_max_cached_workflows,
             graceful_shutdown_timeout=timedelta(seconds=20),
         ):
             await stop.wait()

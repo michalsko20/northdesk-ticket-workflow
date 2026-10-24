@@ -1,0 +1,39 @@
+{
+  "sample_utc": "2026-10-23T18:57:42.200444+00:00",
+  "note": "Point-in-time sample, not peak resource usage",
+  "containers": [
+    {
+      "BlockIO": "0B / 0B",
+      "CPUPerc": "7.24%",
+      "Container": "northdesk-limits-api-1",
+      "ID": "9606ab8e43e4",
+      "MemPerc": "1.13%",
+      "MemUsage": "88.39MiB / 7.653GiB",
+      "Name": "northdesk-limits-api-1",
+      "NetIO": "16.1MB / 8.54MB",
+      "PIDs": "53"
+    },
+    {
+      "BlockIO": "0B / 40.8MB",
+      "CPUPerc": "0.97%",
+      "Container": "northdesk-limits-worker-1",
+      "ID": "0e211cd806d7",
+      "MemPerc": "3.25%",
+      "MemUsage": "254.7MiB / 7.653GiB",
+      "Name": "northdesk-limits-worker-1",
+      "NetIO": "12.7MB / 12.8MB",
+      "PIDs": "521"
+    },
+    {
+      "BlockIO": "0B / 5.84GB",
+      "CPUPerc": "45.59%",
+      "Container": "northdesk-limits-temporal-1",
+      "ID": "481915bc3507",
+      "MemPerc": "4.34%",
+      "MemUsage": "340.3MiB / 7.653GiB",
+      "Name": "northdesk-limits-temporal-1",
+      "NetIO": "15.5MB / 14.8MB",
+      "PIDs": "16"
+    }
+  ]
+}

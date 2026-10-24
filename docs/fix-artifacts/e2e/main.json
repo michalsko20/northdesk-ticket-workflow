@@ -1,0 +1,469 @@
+{
+  "suffix": "mvm8ex9h",
+  "checks": [
+    {
+      "ticket_id": "pw-T1-mvm8ex9h",
+      "expected": "reply",
+      "state": {
+        "ticket_id": "pw-T1-mvm8ex9h",
+        "workflow_id": "ticket/pw-T1-mvm8ex9h",
+        "step": "completed",
+        "proposal": {
+          "action": "reply",
+          "amount_eur": null,
+          "articles": [
+            "KB-1"
+          ],
+          "category": "account",
+          "invoice_id": null,
+          "message": "Open the sign-in page, choose 'Forgot password' and follow the link we email you. The link works for 30 minutes.",
+          "priority": "normal",
+          "reason": null
+        },
+        "decision": {
+          "category": "account",
+          "priority": "normal",
+          "action": "reply",
+          "message": "Open the sign-in page, choose 'Forgot password' and follow the link we email you. The link works for 30 minutes.",
+          "articles": [
+            "KB-1"
+          ],
+          "invoice_id": null,
+          "amount_eur": null,
+          "reason": null
+        },
+        "approval": null,
+        "approval_deadline": null,
+        "result": {
+          "action": "reply",
+          "action_id": "63a4cdd677e1844e3be9",
+          "details": {
+            "action": "reply",
+            "amount_eur": null,
+            "articles": [
+              "KB-1"
+            ],
+            "category": "account",
+            "invoice_id": null,
+            "message": "Open the sign-in page, choose 'Forgot password' and follow the link we email you. The link works for 30 minutes.",
+            "priority": "normal",
+            "reason": null
+          },
+          "ticket_id": "pw-T1-mvm8ex9h"
+        },
+        "error": null,
+        "payload_warning": null
+      }
+    },
+    {
+      "ticket_id": "pw-T2-mvm8ex9h",
+      "expected": "refund",
+      "state": {
+        "ticket_id": "pw-T2-mvm8ex9h",
+        "workflow_id": "ticket/pw-T2-mvm8ex9h",
+        "step": "completed",
+        "proposal": {
+          "action": "refund",
+          "amount_eur": "49.0",
+          "articles": [],
+          "category": "billing",
+          "invoice_id": "INV-1002",
+          "message": null,
+          "priority": "normal",
+          "reason": null
+        },
+        "decision": {
+          "category": "billing",
+          "priority": "normal",
+          "action": "refund",
+          "message": null,
+          "articles": [],
+          "invoice_id": "INV-1002",
+          "amount_eur": "49.00",
+          "reason": null
+        },
+        "approval": {
+          "approved": true,
+          "reviewer": "playwright-reviewer"
+        },
+        "approval_deadline": "2026-10-25T10:04:14.312484+00:00",
+        "result": {
+          "action": "refund",
+          "action_id": "1a580f7635389e34a94a",
+          "details": {
+            "action": "refund",
+            "amount_eur": "49.00",
+            "articles": [],
+            "category": "billing",
+            "invoice_id": "INV-1002",
+            "message": null,
+            "priority": "normal",
+            "reason": null
+          },
+          "ticket_id": "pw-T2-mvm8ex9h"
+        },
+        "error": null,
+        "payload_warning": null
+      }
+    },
+    {
+      "ticket_id": "pw-T3-mvm8ex9h",
+      "expected": "escalate",
+      "state": {
+        "ticket_id": "pw-T3-mvm8ex9h",
+        "workflow_id": "ticket/pw-T3-mvm8ex9h",
+        "step": "completed",
+        "proposal": {
+          "action": "escalate",
+          "amount_eur": null,
+          "articles": [],
+          "category": "technical",
+          "invoice_id": null,
+          "message": null,
+          "priority": "urgent",
+          "reason": "Investigate API outage"
+        },
+        "decision": {
+          "category": "technical",
+          "priority": "urgent",
+          "action": "escalate",
+          "message": null,
+          "articles": [],
+          "invoice_id": null,
+          "amount_eur": null,
+          "reason": "Investigate API outage"
+        },
+        "approval": null,
+        "approval_deadline": null,
+        "result": {
+          "action": "escalate",
+          "action_id": "ebbb98367c545951555a",
+          "details": {
+            "action": "escalate",
+            "amount_eur": null,
+            "articles": [],
+            "category": "technical",
+            "invoice_id": null,
+            "message": null,
+            "priority": "urgent",
+            "reason": "Investigate API outage"
+          },
+          "ticket_id": "pw-T3-mvm8ex9h"
+        },
+        "error": null,
+        "payload_warning": null
+      }
+    },
+    {
+      "ticket_id": "pw-T4-mvm8ex9h",
+      "expected": "reply",
+      "state": {
+        "ticket_id": "pw-T4-mvm8ex9h",
+        "workflow_id": "ticket/pw-T4-mvm8ex9h",
+        "step": "completed",
+        "proposal": {
+          "action": "reply",
+          "amount_eur": null,
+          "articles": [
+            "KB-4"
+          ],
+          "category": "account",
+          "invoice_id": null,
+          "message": "Accounts are suspended when an invoice is overdue for more than 14 days. Pay the invoice to unlock the account.",
+          "priority": "normal",
+          "reason": null
+        },
+        "decision": {
+          "category": "account",
+          "priority": "normal",
+          "action": "reply",
+          "message": "Accounts are suspended when an invoice is overdue for more than 14 days. Pay the invoice to unlock the account.",
+          "articles": [
+            "KB-4"
+          ],
+          "invoice_id": null,
+          "amount_eur": null,
+          "reason": null
+        },
+        "approval": null,
+        "approval_deadline": null,
+        "result": {
+          "action": "reply",
+          "action_id": "157b816b923e6a59fe8c",
+          "details": {
+            "action": "reply",
+            "amount_eur": null,
+            "articles": [
+              "KB-4"
+            ],
+            "category": "account",
+            "invoice_id": null,
+            "message": "Accounts are suspended when an invoice is overdue for more than 14 days. Pay the invoice to unlock the account.",
+            "priority": "normal",
+            "reason": null
+          },
+          "ticket_id": "pw-T4-mvm8ex9h"
+        },
+        "error": null,
+        "payload_warning": null
+      }
+    },
+    {
+      "ticket_id": "pw-T5-mvm8ex9h",
+      "expected": "close",
+      "state": {
+        "ticket_id": "pw-T5-mvm8ex9h",
+        "workflow_id": "ticket/pw-T5-mvm8ex9h",
+        "step": "completed",
+        "proposal": {
+          "action": "close",
+          "amount_eur": null,
+          "articles": [],
+          "category": "other",
+          "invoice_id": null,
+          "message": null,
+          "priority": "low",
+          "reason": "Request is outside support scope"
+        },
+        "decision": {
+          "category": "other",
+          "priority": "low",
+          "action": "close",
+          "message": null,
+          "articles": [],
+          "invoice_id": null,
+          "amount_eur": null,
+          "reason": "Request is outside support scope"
+        },
+        "approval": null,
+        "approval_deadline": null,
+        "result": {
+          "action": "close",
+          "action_id": "11c7d84f2f878617d922",
+          "details": {
+            "action": "close",
+            "amount_eur": null,
+            "articles": [],
+            "category": "other",
+            "invoice_id": null,
+            "message": null,
+            "priority": "low",
+            "reason": "Request is outside support scope"
+          },
+          "ticket_id": "pw-T5-mvm8ex9h"
+        },
+        "error": null,
+        "payload_warning": null
+      }
+    },
+    {
+      "ticket_id": "pw-T6-mvm8ex9h",
+      "expected": "escalate",
+      "state": {
+        "ticket_id": "pw-T6-mvm8ex9h",
+        "workflow_id": "ticket/pw-T6-mvm8ex9h",
+        "step": "completed",
+        "proposal": {
+          "action": "refund",
+          "amount_eur": "5000",
+          "articles": [],
+          "category": "billing",
+          "invoice_id": "INV-1002",
+          "message": null,
+          "priority": "normal",
+          "reason": null
+        },
+        "decision": {
+          "category": "other",
+          "priority": "normal",
+          "action": "escalate",
+          "message": null,
+          "articles": [],
+          "invoice_id": null,
+          "amount_eur": null,
+          "reason": "invalid_refund_amount"
+        },
+        "approval": null,
+        "approval_deadline": null,
+        "result": {
+          "action": "escalate",
+          "action_id": "3de58d142e7f5bd4680e",
+          "details": {
+            "action": "escalate",
+            "amount_eur": null,
+            "articles": [],
+            "category": "other",
+            "invoice_id": null,
+            "message": null,
+            "priority": "normal",
+            "reason": "invalid_refund_amount"
+          },
+          "ticket_id": "pw-T6-mvm8ex9h"
+        },
+        "error": null,
+        "payload_warning": null
+      }
+    },
+    {
+      "ticket_id": "pw-T7-mvm8ex9h",
+      "expected": "escalate",
+      "state": {
+        "ticket_id": "pw-T7-mvm8ex9h",
+        "workflow_id": "ticket/pw-T7-mvm8ex9h",
+        "step": "completed",
+        "proposal": null,
+        "decision": {
+          "category": "other",
+          "priority": "normal",
+          "action": "escalate",
+          "message": null,
+          "articles": [],
+          "invoice_id": null,
+          "amount_eur": null,
+          "reason": "decision_failed:UnknownCustomer"
+        },
+        "approval": null,
+        "approval_deadline": null,
+        "result": {
+          "action": "escalate",
+          "action_id": "760338352f88dfe7c066",
+          "details": {
+            "action": "escalate",
+            "amount_eur": null,
+            "articles": [],
+            "category": "other",
+            "invoice_id": null,
+            "message": null,
+            "priority": "normal",
+            "reason": "decision_failed:UnknownCustomer"
+          },
+          "ticket_id": "pw-T7-mvm8ex9h"
+        },
+        "error": null,
+        "payload_warning": null
+      }
+    },
+    {
+      "ticket_id": "pw-rejected-mvm8ex9h",
+      "expected": "escalate",
+      "state": {
+        "ticket_id": "pw-rejected-mvm8ex9h",
+        "workflow_id": "ticket/pw-rejected-mvm8ex9h",
+        "step": "completed",
+        "proposal": {
+          "action": "refund",
+          "amount_eur": "49.0",
+          "articles": [],
+          "category": "billing",
+          "invoice_id": "INV-1002",
+          "message": null,
+          "priority": "normal",
+          "reason": null
+        },
+        "decision": {
+          "category": "other",
+          "priority": "normal",
+          "action": "escalate",
+          "message": null,
+          "articles": [],
+          "invoice_id": null,
+          "amount_eur": null,
+          "reason": "approval_rejected"
+        },
+        "approval": {
+          "approved": false,
+          "reviewer": "playwright-reviewer"
+        },
+        "approval_deadline": "2026-10-25T10:04:16.934747+00:00",
+        "result": {
+          "action": "escalate",
+          "action_id": "2d407346bf32851dafc6",
+          "details": {
+            "action": "escalate",
+            "amount_eur": null,
+            "articles": [],
+            "category": "other",
+            "invoice_id": null,
+            "message": null,
+            "priority": "normal",
+            "reason": "approval_rejected"
+          },
+          "ticket_id": "pw-rejected-mvm8ex9h"
+        },
+        "error": null,
+        "payload_warning": null
+      }
+    },
+    {
+      "ticket_id": "pw-lost-ack-mvm8ex9h",
+      "expected": "refund",
+      "state": {
+        "ticket_id": "pw-lost-ack-mvm8ex9h",
+        "workflow_id": "ticket/pw-lost-ack-mvm8ex9h",
+        "step": "completed",
+        "proposal": {
+          "action": "refund",
+          "amount_eur": "49.0",
+          "articles": [],
+          "category": "billing",
+          "invoice_id": "INV-1002",
+          "message": null,
+          "priority": "normal",
+          "reason": null
+        },
+        "decision": {
+          "category": "billing",
+          "priority": "normal",
+          "action": "refund",
+          "message": null,
+          "articles": [],
+          "invoice_id": "INV-1002",
+          "amount_eur": "49.00",
+          "reason": null
+        },
+        "approval": {
+          "approved": true,
+          "reviewer": "playwright-reviewer"
+        },
+        "approval_deadline": "2026-10-25T10:04:17.343407+00:00",
+        "result": {
+          "action": "refund",
+          "action_id": "d3ebaab56a324aa6a589",
+          "details": {
+            "action": "refund",
+            "amount_eur": "49.00",
+            "articles": [],
+            "category": "billing",
+            "invoice_id": "INV-1002",
+            "message": null,
+            "priority": "normal",
+            "reason": null
+          },
+          "ticket_id": "pw-lost-ack-mvm8ex9h"
+        },
+        "error": null,
+        "payload_warning": null
+      },
+      "lostAcknowledgement": true
+    }
+  ],
+  "pendingRestartTicket": "pw-restart-mvm8ex9h",
+  "screenshots": [
+    "00-swagger-ready.png",
+    "t1-completed-reply.png",
+    "02-refund-awaiting-approval.png",
+    "t2-completed-refund.png",
+    "03-closed-approval-conflict.png",
+    "t3-completed-escalate.png",
+    "t4-completed-reply.png",
+    "t5-completed-close.png",
+    "t6-completed-escalate.png",
+    "t7-completed-escalate.png",
+    "08-rejected-refund-escalated.png",
+    "15-approval-ack-lost-but-refund-completed.png",
+    "09-ticket-not-found.png",
+    "10-input-validation.png",
+    "11-before-worker-restart.png"
+  ],
+  "browserErrors": []
+}

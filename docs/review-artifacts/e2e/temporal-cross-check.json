@@ -1,0 +1,111 @@
+[
+  {
+    "ticket_id": "pw-T1-mvl6klqk",
+    "activityAttemptNumbers": [
+      1,
+      1,
+      1
+    ],
+    "completedApprovalUpdates": 0,
+    "workflowCompleted": true
+  },
+  {
+    "ticket_id": "pw-T2-mvl6klqk",
+    "activityAttemptNumbers": [
+      1,
+      1,
+      1
+    ],
+    "completedApprovalUpdates": 1,
+    "workflowCompleted": true
+  },
+  {
+    "ticket_id": "pw-T3-mvl6klqk",
+    "activityAttemptNumbers": [
+      1,
+      1,
+      1
+    ],
+    "completedApprovalUpdates": 0,
+    "workflowCompleted": true
+  },
+  {
+    "ticket_id": "pw-T4-mvl6klqk",
+    "activityAttemptNumbers": [
+      1,
+      1,
+      1
+    ],
+    "completedApprovalUpdates": 0,
+    "workflowCompleted": true
+  },
+  {
+    "ticket_id": "pw-T5-mvl6klqk",
+    "activityAttemptNumbers": [
+      1,
+      1,
+      1
+    ],
+    "completedApprovalUpdates": 0,
+    "workflowCompleted": true
+  },
+  {
+    "ticket_id": "pw-T6-mvl6klqk",
+    "activityAttemptNumbers": [
+      1,
+      1,
+      1
+    ],
+    "completedApprovalUpdates": 0,
+    "workflowCompleted": true
+  },
+  {
+    "ticket_id": "pw-T7-mvl6klqk",
+    "activityAttemptNumbers": [
+      1,
+      1
+    ],
+    "completedApprovalUpdates": 0,
+    "workflowCompleted": true
+  },
+  {
+    "ticket_id": "pw-rejected-mvl6klqk",
+    "activityAttemptNumbers": [
+      1,
+      1,
+      1
+    ],
+    "completedApprovalUpdates": 1,
+    "workflowCompleted": true
+  },
+  {
+    "ticket_id": "pw-lost-ack-mvl6klqk",
+    "activityAttemptNumbers": [
+      1,
+      1,
+      1
+    ],
+    "completedApprovalUpdates": 1,
+    "workflowCompleted": true
+  },
+  {
+    "ticket_id": "pw-restart-mvl6klqk",
+    "activityAttemptNumbers": [
+      1,
+      1,
+      1
+    ],
+    "completedApprovalUpdates": 1,
+    "workflowCompleted": true
+  },
+  {
+    "ticket_id": "pw-delivery-failed-mvl6mwzl",
+    "activityAttemptNumbers": [
+      1,
+      1,
+      5
+    ],
+    "completedApprovalUpdates": 0,
+    "workflowCompleted": true
+  }
+]

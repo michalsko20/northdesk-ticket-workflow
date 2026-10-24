@@ -1,0 +1,10 @@
+Total messages: 0 (Errors: 0, Warnings: 0)
+Returning 7 messages for level "error"
+
+[ERROR] Failed to load resource: the server responded with a status of 409 (Conflict) @ http://127.0.0.1:8001/tickets/pw-T2-mvl6fb4d/approval:0
+[ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8001/tickets/pw-missing-mvl6fb4d:0
+[ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8001/tickets:0
+[ERROR] Failed to load resource: the server responded with a status of 409 (Conflict) @ http://127.0.0.1:8001/tickets/pw-T2-mvl6klqk/approval:0
+[ERROR] Failed to load resource: net::ERR_FAILED @ http://127.0.0.1:8001/tickets/pw-lost-ack-mvl6klqk/approval:0
+[ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8001/tickets/pw-missing-mvl6klqk:0
+[ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8001/tickets:0

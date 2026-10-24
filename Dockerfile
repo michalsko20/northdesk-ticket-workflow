@@ -5,12 +5,15 @@ ENV UV_LINK_MODE=copy UV_PYTHON_DOWNLOADS=never PYTHONUNBUFFERED=1 PATH="/app/.v
 COPY pyproject.toml uv.lock ./
 RUN uv sync --locked --no-dev --no-install-project
 COPY src ./src
-RUN uv sync --locked --no-dev && useradd --uid 10001 --create-home app \
-    && mkdir /state && chown app:app /state
+RUN uv sync --locked --no-dev && useradd --uid 10001 --create-home --shell /usr/sbin/nologin app \
+    && mkdir /state && chown app:app /state \
+    && chmod 750 /state
 
 FROM base AS runtime
 USER app
-CMD ["uvicorn", "northdesk.api:app", "--host", "0.0.0.0", "--port", "8000", "--no-access-log"]
+# --limit-concurrency prevents unbounded connection accumulation;
+# --timeout-keep-alive (5s) is below the default client pool idle timeout.
+CMD ["uvicorn", "northdesk.api:app", "--host", "0.0.0.0", "--port", "8000", "--no-access-log", "--limit-concurrency", "256", "--timeout-keep-alive", "5", "--h11-max-incomplete-event-size", "16384"]
 
 FROM base AS tests
 RUN uv sync --locked

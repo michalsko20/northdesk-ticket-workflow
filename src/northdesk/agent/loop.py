@@ -4,6 +4,7 @@ from dataclasses import asdict
 from northdesk.agent.providers import MalformedResponse, PermanentAgentError, Provider
 from northdesk.agent.tools import execute_tool, tool_definitions
 from northdesk.domain.models import Ticket
+from northdesk.domain.payloads import MAX_PROPOSAL_BYTES, MAX_PROVIDER_TURN_BYTES, json_fits
 from northdesk.services.catalog import Catalog
 
 
@@ -16,9 +17,13 @@ async def decide(
     count = 0
     for _ in range(max_rounds):
         turn = await provider.step(messages, tool_definitions())
+        if not json_fits(turn.output, MAX_PROVIDER_TURN_BYTES):
+            raise PermanentAgentError("invalid_provider_turn_encoding_or_size")
         if not turn.calls:
             if not isinstance(turn.decision, dict):
                 raise MalformedResponse("llm_unreadable_decision")
+            if not json_fits(turn.decision, MAX_PROPOSAL_BYTES):
+                raise PermanentAgentError("invalid_proposal_encoding_or_size")
             return turn.decision
         messages.extend(turn.output)
         for call in turn.calls:

@@ -47,6 +47,7 @@ async def test_glm_protocol_preserves_tool_ids_and_reasoning_between_rounds():
         assert "response_format" not in payload
         assert payload["tools"][-1]["function"]["name"] == "submit_decision"
         assert payload["reasoning_effort"] == "low"
+        assert payload["max_tokens"] == 4096
         assert payload["tools"][0]["function"]["name"] == "get_customer"
         if len(requests) == 1:
             return httpx2.Response(
@@ -212,6 +213,36 @@ async def test_glm_rejects_malformed_final_proposals_and_mixed_batches(arguments
     )
     try:
         with pytest.raises(MalformedResponse):
+            await provider.step([], [])
+    finally:
+        await provider.close()
+
+
+@pytest.mark.parametrize("error", [httpx2.ConnectError, httpx2.ReadTimeout])
+async def test_glm_transport_failures_are_retryable_without_sdk_retries(error):
+    calls = []
+
+    def handler(request):
+        calls.append(request)
+        raise error("synthetic transport failure", request=request)
+
+    provider = await provider_with_transport(handler)
+    try:
+        with pytest.raises(TransientAgentError, match="glm_connection_error"):
+            await provider.step([], [])
+        assert len(calls) == 1
+    finally:
+        await provider.close()
+
+
+async def test_empty_glm_choices_are_a_bounded_malformed_response():
+    provider = await provider_with_transport(
+        lambda request: httpx2.Response(
+            200, json={**completion({"role": "assistant"}), "choices": []}
+        )
+    )
+    try:
+        with pytest.raises(MalformedResponse, match="glm_empty_response"):
             await provider.step([], [])
     finally:
         await provider.close()

@@ -84,3 +84,63 @@ class BrokenProvider:
 async def test_unreadable_decision_has_clear_error():
     with pytest.raises(MalformedResponse):
         await decide(TICKETS[0], BrokenProvider(), Catalog())
+
+
+@pytest.mark.parametrize("calls,allowed", [(12, True), (13, False)])
+async def test_tool_batch_limit_accepts_boundary_and_rejects_one_over(calls, allowed):
+    class BatchProvider:
+        def __init__(self):
+            self.rounds = 0
+
+        async def step(self, messages, tools):
+            self.rounds += 1
+            if self.rounds == 1:
+                return Turn(calls=[ToolCall(str(i), "get_customer", "{}") for i in range(calls)])
+            return Turn(decision={"action": "close"})
+
+    provider = BatchProvider()
+    if allowed:
+        assert (await decide(TICKETS[0], provider, Catalog()))["action"] == "close"
+        assert provider.rounds == 2
+    else:
+        with pytest.raises(PermanentAgentError, match="agent_tool_limit"):
+            await decide(TICKETS[0], provider, Catalog())
+        assert provider.rounds == 1
+
+
+@pytest.mark.parametrize("reads,allowed", [(5, True), (6, False)])
+async def test_final_decision_must_fit_within_six_rounds(reads, allowed):
+    class RoundProvider:
+        def __init__(self):
+            self.rounds = 0
+
+        async def step(self, messages, tools):
+            self.rounds += 1
+            if self.rounds <= reads:
+                return Turn(calls=[ToolCall(str(self.rounds), "get_customer", "{}")])
+            return Turn(decision={"action": "close"})
+
+    provider = RoundProvider()
+    if allowed:
+        assert (await decide(TICKETS[0], provider, Catalog()))["action"] == "close"
+    else:
+        with pytest.raises(PermanentAgentError, match="agent_round_limit"):
+            await decide(TICKETS[0], provider, Catalog())
+    assert provider.rounds == 6
+
+
+@pytest.mark.parametrize("query", [None, False, 1, {}, [], "", "x" * 1001])
+def test_search_query_type_and_size_are_checked_in_code(query):
+    with pytest.raises(PermanentAgentError, match="unknown_tool_or_invalid_arguments"):
+        execute_tool(Catalog(), TICKETS[0], "search_kb", json.dumps({"query": query}))
+
+
+def test_search_accepts_exact_limit_without_changing_customer_scope():
+    assert execute_tool(Catalog(), TICKETS[0], "search_kb", json.dumps({"query": "x" * 1000})) == []
+    with pytest.raises(PermanentAgentError):
+        execute_tool(
+            Catalog(),
+            TICKETS[0],
+            "search_kb",
+            json.dumps({"query": "password", "customer_id": "C-300"}),
+        )

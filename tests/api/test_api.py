@@ -88,6 +88,29 @@ async def test_concurrent_submissions_start_one_workflow(api):
     assert (await api.post("/tickets", json={**payload, "body": "changed"})).json()["duplicate"]
 
 
+async def test_concurrent_different_payloads_preserve_the_accepted_ticket(api):
+    ticket_id = f"different-{uuid.uuid4()}"
+    candidates = [
+        ({"customer_id": "C-200", "subject": "Password", "body": "Forgot password"}, "reply"),
+        ({"customer_id": "C-300", "subject": "API down", "body": "API outage"}, "escalate"),
+        ({"customer_id": "C-100", "subject": "Lunch", "body": "Pizza?"}, "close"),
+    ] * 8
+    responses = await asyncio.gather(
+        *(
+            api.post("/tickets", json={"ticket_id": ticket_id, **payload})
+            for payload, _ in candidates
+        )
+    )
+    assert all(response.status_code == 202 for response in responses)
+    winners = [
+        index for index, response in enumerate(responses) if not response.json()["duplicate"]
+    ]
+    assert len(winners) == 1
+    expected_action = candidates[winners[0]][1]
+    state = await wait_for(api, ticket_id, "completed")
+    assert state["result"]["action"] == expected_action
+
+
 @pytest.mark.parametrize("approved,action", [(True, "refund"), (False, "escalate")])
 async def test_refund_approval_api(api, approved, action):
     payload = ticket(refund=True)
@@ -149,6 +172,31 @@ async def test_submission_does_not_require_a_worker(temporal_env):
         description = await handle.describe(rpc_timeout=timedelta(seconds=2))
         assert description.close_time is None
         await handle.terminate("Test completed")
+
+
+async def test_completed_status_does_not_require_a_worker(temporal_env, tmp_path):
+    payload = ticket()
+    queue = f"closed-status-{uuid.uuid4()}"
+    activities = Activities(FakeProvider(), Catalog(), FakeHelpdesk(str(tmp_path / "effects.db")))
+    async with Worker(
+        temporal_env.client,
+        task_queue=queue,
+        workflows=[TicketWorkflow],
+        activities=[activities.decide_ticket, activities.validate_ticket, activities.act_on_ticket],
+    ):
+        await temporal_env.client.execute_workflow(
+            TicketWorkflow.run,
+            Ticket(**payload),
+            id=f"ticket/{payload['ticket_id']}",
+            task_queue=queue,
+        )
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=create_app(client=temporal_env.client)),
+        base_url="http://test",
+    ) as api:
+        response = await api.get(f"/tickets/{payload['ticket_id']}")
+        assert response.status_code == 200
+        assert response.json()["result"]["action"] == "reply"
 
 
 @pytest.mark.parametrize(

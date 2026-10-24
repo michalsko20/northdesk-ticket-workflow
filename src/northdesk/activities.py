@@ -49,7 +49,11 @@ class Activities:
             raise ApplicationError(
                 str(exc), type="PermanentAgentError", non_retryable=True
             ) from exc
-        except (MalformedResponse, TransientAgentError) as exc:
+        except TransientAgentError as exc:
+            raise ApplicationError(
+                str(exc), type="TransientAgentError", next_retry_delay=exc.retry_after
+            ) from exc
+        except MalformedResponse as exc:
             raise ApplicationError(str(exc), type=type(exc).__name__) from exc
         log_activity(ticket, "agent_decided")
         return result

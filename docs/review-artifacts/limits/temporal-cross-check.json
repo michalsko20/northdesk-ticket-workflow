@@ -1,0 +1,122 @@
+[
+  {
+    "report": "load.json",
+    "phase": "c1",
+    "executions": 150,
+    "workflow_duration_ms": {
+      "p50": 615.77,
+      "p95": 783.15,
+      "p99": 842.41
+    }
+  },
+  {
+    "report": "load.json",
+    "phase": "c10",
+    "executions": 150,
+    "workflow_duration_ms": {
+      "p50": 2736.29,
+      "p95": 5059.8,
+      "p99": 5161.15
+    }
+  },
+  {
+    "report": "load.json",
+    "phase": "c50",
+    "executions": 150,
+    "workflow_duration_ms": {
+      "p50": 3688.63,
+      "p95": 5987.39,
+      "p99": 6059.59
+    }
+  },
+  {
+    "report": "load.json",
+    "phase": "c100",
+    "executions": 150,
+    "workflow_duration_ms": {
+      "p50": 3416.47,
+      "p95": 5055.8,
+      "p99": 5088.06
+    }
+  },
+  {
+    "report": "load.json",
+    "phase": "duplicates",
+    "executions": 1,
+    "workflow_duration_ms": {
+      "p50": 44.02,
+      "p95": 44.02,
+      "p99": 44.02
+    }
+  },
+  {
+    "report": "load.json",
+    "phase": "max-unicode",
+    "executions": 30,
+    "workflow_duration_ms": {
+      "p50": 915.75,
+      "p95": 1216.61,
+      "p99": 1232.09
+    }
+  },
+  {
+    "report": "load-high.json",
+    "phase": "c200",
+    "executions": 500,
+    "workflow_duration_ms": {
+      "p50": 11008.37,
+      "p95": 20487.43,
+      "p99": 23789.33
+    }
+  },
+  {
+    "report": "load-high.json",
+    "phase": "duplicates",
+    "executions": 1,
+    "workflow_duration_ms": {
+      "p50": 79.7,
+      "p95": 79.7,
+      "p99": 79.7
+    }
+  },
+  {
+    "report": "load-high.json",
+    "phase": "max-unicode",
+    "executions": 30,
+    "workflow_duration_ms": {
+      "p50": 1294.86,
+      "p95": 1700.79,
+      "p99": 1748.69
+    }
+  },
+  {
+    "report": "load-high-isolated.json",
+    "phase": "c200",
+    "executions": 500,
+    "workflow_duration_ms": {
+      "p50": 13110.26,
+      "p95": 21046.84,
+      "p99": 23647.17
+    }
+  },
+  {
+    "report": "load-high-isolated.json",
+    "phase": "duplicates",
+    "executions": 1,
+    "workflow_duration_ms": {
+      "p50": 59.69,
+      "p95": 59.69,
+      "p99": 59.69
+    }
+  },
+  {
+    "report": "load-high-isolated.json",
+    "phase": "max-unicode",
+    "executions": 30,
+    "workflow_duration_ms": {
+      "p50": 1061.06,
+      "p95": 1327.62,
+      "p99": 1371.39
+    }
+  }
+]

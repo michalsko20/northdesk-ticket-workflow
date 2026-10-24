@@ -1,0 +1,16 @@
+{
+  "baseline_commit": "d39a825",
+  "transport": "real Uvicorn TCP socket; loopback only; mocked Temporal; streamed valid 20,000-emoji ticket",
+  "tests": [
+    {
+      "test": "test_overload_response_survives_streamed_valid_body_and_connection_reuse[False]",
+      "failed": true,
+      "failure_type": "httpx.ReadError"
+    },
+    {
+      "test": "test_overload_response_survives_streamed_valid_body_and_connection_reuse[True]",
+      "failed": true,
+      "failure_type": "httpx.ReadError"
+    }
+  ]
+}

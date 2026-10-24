@@ -2,6 +2,12 @@ import json
 
 from northdesk.agent.providers import PermanentAgentError
 from northdesk.domain.models import Ticket
+from northdesk.domain.payloads import (
+    MAX_TOOL_ARGUMENT_BYTES,
+    has_control_characters,
+    json_fits,
+    text_fits,
+)
 from northdesk.services.catalog import Catalog
 
 
@@ -36,11 +42,13 @@ def tool_definitions() -> list[dict]:
 
 
 def execute_tool(catalog: Catalog, ticket: Ticket, name: str, arguments: str) -> object:
+    if not text_fits(arguments, MAX_TOOL_ARGUMENT_BYTES):
+        raise PermanentAgentError("invalid_tool_arguments")
     try:
         params = json.loads(arguments)
-    except json.JSONDecodeError as exc:
+    except (ValueError, RecursionError) as exc:
         raise PermanentAgentError("invalid_tool_arguments") from exc
-    if not isinstance(params, dict):
+    if not isinstance(params, dict) or not json_fits(params, MAX_TOOL_ARGUMENT_BYTES):
         raise PermanentAgentError("invalid_tool_arguments")
     # Customer scope comes from the ticket, never from LLM-controlled arguments.
     if name == "get_customer" and not params:
@@ -49,6 +57,6 @@ def execute_tool(catalog: Catalog, ticket: Ticket, name: str, arguments: str) ->
         return catalog.get_invoices(ticket.customer_id)
     if name == "search_kb" and set(params) == {"query"}:
         query = params["query"]
-        if isinstance(query, str) and 0 < len(query) <= 1000:
+        if isinstance(query, str) and 0 < len(query) <= 1000 and not has_control_characters(query):
             return catalog.search_kb(query)
     raise PermanentAgentError("unknown_tool_or_invalid_arguments")

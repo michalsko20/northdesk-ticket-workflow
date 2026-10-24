@@ -1,0 +1,73 @@
+{
+  "browser_tickets": [
+    {
+      "ticket_id": "pw-T1-mvm8ex9h",
+      "history_events": 25,
+      "effect_count": 1,
+      "expected_action": "reply"
+    },
+    {
+      "ticket_id": "pw-T2-mvm8ex9h",
+      "history_events": 32,
+      "effect_count": 1,
+      "expected_action": "refund"
+    },
+    {
+      "ticket_id": "pw-T3-mvm8ex9h",
+      "history_events": 25,
+      "effect_count": 1,
+      "expected_action": "escalate"
+    },
+    {
+      "ticket_id": "pw-T4-mvm8ex9h",
+      "history_events": 25,
+      "effect_count": 1,
+      "expected_action": "reply"
+    },
+    {
+      "ticket_id": "pw-T5-mvm8ex9h",
+      "history_events": 25,
+      "effect_count": 1,
+      "expected_action": "close"
+    },
+    {
+      "ticket_id": "pw-T6-mvm8ex9h",
+      "history_events": 25,
+      "effect_count": 1,
+      "expected_action": "escalate"
+    },
+    {
+      "ticket_id": "pw-T7-mvm8ex9h",
+      "history_events": 21,
+      "effect_count": 1,
+      "expected_action": "escalate"
+    },
+    {
+      "ticket_id": "pw-rejected-mvm8ex9h",
+      "history_events": 32,
+      "effect_count": 1,
+      "expected_action": "escalate"
+    },
+    {
+      "ticket_id": "pw-lost-ack-mvm8ex9h",
+      "history_events": 32,
+      "effect_count": 1,
+      "expected_action": "refund"
+    },
+    {
+      "ticket_id": "pw-restart-mvm8ex9h",
+      "history_events": 32,
+      "effect_count": 1,
+      "expected_action": "refund"
+    },
+    {
+      "ticket_id": "pw-delivery-failed-mvm8fhz8",
+      "history_events": 27,
+      "effect_count": 0,
+      "expected_action": null
+    }
+  ],
+  "load_unique_tickets": 531,
+  "load_effect_count": 531,
+  "success": true
+}
