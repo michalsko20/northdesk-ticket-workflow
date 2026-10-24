@@ -24,3 +24,18 @@ def test_json_logs_preserve_ticket_and_workflow_context():
     assert entry["ticket_id"] == "T-1"
     assert entry["workflow_id"] == "ticket/T-1"
     assert entry["event"] == "ticket_step"
+
+
+@pytest.mark.parametrize(
+    "mode,missing,other",
+    [("openai", "openai_api_key", "zai_api_key"), ("glm", "zai_api_key", "openai_api_key")],
+)
+def test_startup_validation_does_not_print_other_provider_credential(mode, missing, other):
+    # Model-level validators receive raw input; SecretStr alone cannot hide it
+    # when Pydantic renders the original input in a validation traceback.
+    credential = "s3cr3t"
+    with pytest.raises(ValidationError) as caught:
+        Settings(_env_file=None, llm_mode=mode, **{missing: "", other: credential})
+    assert "is required" in str(caught.value)
+    assert credential not in str(caught.value)
+    assert "input_value" not in str(caught.value)

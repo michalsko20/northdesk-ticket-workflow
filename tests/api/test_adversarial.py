@@ -1,14 +1,15 @@
 """HTTP input regressions: rejected data must not mutate Temporal state."""
 
 import json
+from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
 import httpx
 import pytest
-from temporalio.client import Client
+from temporalio.client import Client, WorkflowExecutionStatus
 
 from northdesk.api import create_app
-from northdesk.domain.models import Approval
+from northdesk.domain.models import Approval, TicketState
 
 
 @pytest.fixture
@@ -131,3 +132,41 @@ async def test_top_level_json_type_confusion_is_rejected(input_api, value):
     )
     assert response.status_code == 422
     temporal.start_workflow.assert_not_called()
+
+
+@pytest.mark.parametrize(
+    "ticket_id", ["x" * 81, "x" * 1100, "white%20space", "bad%0Aline", "zażółć"]
+)
+@pytest.mark.parametrize("operation", ["read", "approval"])
+async def test_invalid_path_id_is_rejected_before_backend_dispatch(input_api, ticket_id, operation):
+    api, temporal = input_api
+    path = f"/tickets/{ticket_id}"
+    response = (
+        await api.get(path)
+        if operation == "read"
+        else await api.post(path + "/approval", json={"approved": True, "reviewer": "operator"})
+    )
+    assert response.status_code == 422
+    assert len(response.content) < 2000
+    temporal.get_workflow_handle_for.assert_not_called()
+
+
+@pytest.mark.parametrize("length", [1, 80])
+@pytest.mark.parametrize("operation", ["read", "approval"])
+async def test_path_id_valid_length_boundaries_remain_usable(input_api, length, operation):
+    api, temporal = input_api
+    ticket_id = "x" * length
+    handle = temporal.get_workflow_handle_for.return_value
+    handle.describe = AsyncMock(
+        return_value=SimpleNamespace(status=WorkflowExecutionStatus.COMPLETED)
+    )
+    handle.result = AsyncMock(return_value=TicketState(ticket_id=ticket_id, step="completed"))
+    handle.execute_update = AsyncMock(return_value=Approval(True, "operator"))
+    path = f"/tickets/{ticket_id}"
+    response = (
+        await api.get(path)
+        if operation == "read"
+        else await api.post(path + "/approval", json={"approved": True, "reviewer": "operator"})
+    )
+    assert response.status_code == 200
+    assert temporal.get_workflow_handle_for.call_args.args[1] == f"ticket/{ticket_id}"

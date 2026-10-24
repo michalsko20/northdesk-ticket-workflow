@@ -25,7 +25,9 @@ class HttpLimits:
             await JSONResponse(
                 {"detail": "Service is busy; retry with the same ticket ID"},
                 status_code=503,
-                headers={"Retry-After": "1", "Connection": "close"},
+                # Leave connection lifecycle to the server: closing while the
+                # caller is uploading can turn this rejection into a TCP reset.
+                headers={"Retry-After": "1"},
             )(scope, receive, send)
             return
         for key, value in scope.get("headers", []):

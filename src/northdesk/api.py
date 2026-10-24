@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from datetime import UTC, datetime, timedelta
 from typing import Annotated, cast
 
-from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi import Depends, FastAPI, HTTPException, Path, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field, StrictBool
@@ -33,11 +33,13 @@ from northdesk.workflows.ticket import TicketWorkflow
 
 logger = logging.getLogger(__name__)
 RPC_TIMEOUT = timedelta(seconds=5)
+TICKET_ID_PATTERN = r"^[A-Za-z0-9_-]{1,80}$"
+TicketIdPath = Annotated[str, Path(pattern=TICKET_ID_PATTERN, max_length=80)]
 
 
 class TicketRequest(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
-    ticket_id: str = Field(pattern=r"^[A-Za-z0-9_-]{1,80}$")
+    ticket_id: str = Field(pattern=TICKET_ID_PATTERN)
     customer_id: str = Field(pattern=r"^[A-Za-z0-9_-]{1,80}$")
     subject: str = Field(min_length=1, max_length=500)
     body: str = Field(min_length=1, max_length=20000)
@@ -177,7 +179,7 @@ def create_app(settings: Settings | None = None, client: Client | None = None) -
 
     @application.get("/tickets/{ticket_id}", response_model=TicketState)
     async def status(
-        ticket_id: str, temporal: Annotated[Client, Depends(get_client)]
+        ticket_id: TicketIdPath, temporal: Annotated[Client, Depends(get_client)]
     ) -> TicketState:
         workflow_id = ticket_log(ticket_id, "ticket_status_read")
         handle = temporal.get_workflow_handle_for(TicketWorkflow.run, workflow_id)
@@ -231,7 +233,7 @@ def create_app(settings: Settings | None = None, client: Client | None = None) -
 
     @application.post("/tickets/{ticket_id}/approval", response_model=Approval)
     async def approve(
-        ticket_id: str,
+        ticket_id: TicketIdPath,
         payload: ApprovalRequest,
         temporal: Annotated[Client, Depends(get_client)],
     ) -> Approval:

@@ -53,7 +53,7 @@ def provider_retry_delay(
     if seconds is None or not math.isfinite(seconds) or seconds <= 0:
         return None
     if seconds > 300:
-        raise PermanentAgentError("provider_backoff_exceeds_activity_budget")
+        raise PermanentAgentError("provider_backoff_exceeds_activity_budget") from None
     return timedelta(seconds=seconds)
 
 
@@ -146,8 +146,8 @@ class OpenAIProvider:
                 max_output_tokens=2000,
                 parallel_tool_calls=False,
             )
-        except APIConnectionError as exc:
-            raise TransientAgentError("llm_connection_error") from exc
+        except APIConnectionError:
+            raise TransientAgentError("llm_connection_error") from None
         except APIStatusError as exc:
             if exc.status_code in (408, 409, 429) or exc.status_code >= 500:
                 raise TransientAgentError(
