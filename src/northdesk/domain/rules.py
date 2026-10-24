@@ -4,7 +4,13 @@ from dataclasses import fields
 from decimal import Decimal, InvalidOperation
 
 from northdesk.domain.models import Decision, Ticket, escalation
-from northdesk.domain.payloads import MAX_ARTICLES, MAX_PROPOSAL_BYTES, json_fits, text_fits
+from northdesk.domain.payloads import (
+    MAX_ARTICLES,
+    MAX_PROPOSAL_BYTES,
+    has_control_characters,
+    json_fits,
+    text_fits,
+)
 
 CATEGORIES = ("account", "billing", "technical", "other")
 PRIORITIES = ("low", "normal", "high", "urgent")
@@ -31,6 +37,8 @@ def validate_decision(
             return escalation("missing_reply_message")
         if not text_fits(message):
             return escalation("invalid_reply_encoding_or_size")
+        if has_control_characters(message):
+            return escalation("invalid_reply_control_characters")
         if not isinstance(articles, list) or any(
             not isinstance(article, str) or article not in article_ids for article in articles
         ):
@@ -45,6 +53,8 @@ def validate_decision(
             return escalation("missing_action_reason")
         if not text_fits(reason):
             return escalation("invalid_reason_encoding_or_size")
+        if has_control_characters(reason):
+            return escalation("invalid_reason_control_characters")
         return Decision(**common, reason=reason)
 
     invoice = next((i for i in invoices if i["invoice_id"] == proposal.get("invoice_id")), None)

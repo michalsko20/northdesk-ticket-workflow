@@ -8,7 +8,7 @@ from typing import Annotated, cast
 from fastapi import Depends, FastAPI, HTTPException, Path, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, ConfigDict, Field, StrictBool
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, field_validator
 from temporalio.api.enums.v1 import TaskQueueType
 from temporalio.api.taskqueue.v1 import TaskQueue
 from temporalio.api.workflowservice.v1 import DescribeTaskQueueRequest
@@ -25,8 +25,8 @@ from temporalio.service import RPCError, RPCStatusCode
 
 from northdesk.connection import connect
 from northdesk.domain.models import Approval, Ticket, TicketState
-from northdesk.domain.payloads import bounded_state
-from northdesk.http_limits import HttpLimits
+from northdesk.domain.payloads import bounded_state, has_control_characters
+from northdesk.http_limits import HttpLimits, SecurityHeaders
 from northdesk.logging import configure_logging
 from northdesk.settings import Settings
 from northdesk.workflows.ticket import TicketWorkflow
@@ -35,6 +35,12 @@ logger = logging.getLogger(__name__)
 RPC_TIMEOUT = timedelta(seconds=5)
 TICKET_ID_PATTERN = r"^[A-Za-z0-9_-]{1,80}$"
 TicketIdPath = Annotated[str, Path(pattern=TICKET_ID_PATTERN, max_length=80)]
+SECURITY_HEADERS = {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "no-referrer",
+    "Cache-Control": "no-store",
+}
 
 
 class TicketRequest(BaseModel):
@@ -44,11 +50,25 @@ class TicketRequest(BaseModel):
     subject: str = Field(min_length=1, max_length=500)
     body: str = Field(min_length=1, max_length=20000)
 
+    @field_validator("subject", "body")
+    @classmethod
+    def reject_control_characters(cls, value: str) -> str:
+        if has_control_characters(value):
+            raise ValueError("text must not contain control or format characters")
+        return value
+
 
 class ApprovalRequest(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
     approved: StrictBool
     reviewer: str = Field(min_length=1, max_length=100)
+
+    @field_validator("reviewer")
+    @classmethod
+    def reject_control_characters(cls, value: str) -> str:
+        if has_control_characters(value):
+            raise ValueError("reviewer must not contain control or format characters")
+        return value
 
 
 class TicketAccepted(BaseModel):
@@ -86,6 +106,7 @@ def create_app(settings: Settings | None = None, client: Client | None = None) -
         max_inflight=config.http_max_inflight,
         body_timeout=config.http_body_timeout_seconds,
     )
+    application.add_middleware(SecurityHeaders)
 
     @application.exception_handler(RequestValidationError)
     async def invalid_request(request: Request, exc: RequestValidationError) -> JSONResponse:

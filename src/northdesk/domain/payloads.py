@@ -1,6 +1,7 @@
 """Deterministic byte budgets shared by activities, policy and read projections."""
 
 import json
+import unicodedata
 from dataclasses import asdict, replace
 
 from northdesk.domain.models import Decision, TicketState
@@ -12,6 +13,22 @@ MAX_TOOL_ARGUMENT_BYTES = 16 * 1024
 MAX_PROVIDER_TURN_BYTES = 128 * 1024
 MAX_STATE_BYTES = 256 * 1024
 OMITTED = "[omitted: invalid or oversized legacy text]"
+
+
+def has_control_characters(value: str) -> bool:
+    """Return True for text containing unsafe control or format characters.
+
+    Horizontal tab (\t) and newline (\n) are allowed because they carry
+    meaningful structure in ticket bodies. All other control (Cc) and format
+    (Cf) characters, including bidirectional overrides and zero-width marks,
+    are rejected.
+    """
+    allowed = {"\t", "\n"}
+    for char in value:
+        category = unicodedata.category(char)
+        if category in ("Cc", "Cf") and char not in allowed:
+            return True
+    return False
 
 
 def json_fits(value: object, budget: int) -> bool:

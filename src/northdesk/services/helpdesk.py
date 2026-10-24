@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import os
 import random
 import sqlite3
 from collections.abc import Callable
@@ -34,13 +35,22 @@ class FakeHelpdesk:
         self.failure_rate = failure_rate
         self.random_value = random_value
         self.after_commit = after_commit
-        Path(path).parent.mkdir(parents=True, exist_ok=True)
+        parent = Path(path).parent
+        parent.mkdir(parents=True, exist_ok=True)
+        # Restrict the state directory to owner-only access.
+        os.chmod(parent, 0o700)
         with closing(self._connect()) as db, db:
             db.execute("""CREATE TABLE IF NOT EXISTS actions (
                 idempotency_key TEXT PRIMARY KEY,
                 fingerprint TEXT NOT NULL,
                 result TEXT NOT NULL
             )""")
+        # Restrict the database file to owner-only access (best effort on
+        # filesystems that do not support POSIX modes).
+        try:
+            os.chmod(path, 0o600)
+        except OSError:
+            pass
 
     def _connect(self) -> sqlite3.Connection:
         return sqlite3.connect(self.path, timeout=5)

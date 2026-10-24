@@ -2,7 +2,12 @@ import json
 
 from northdesk.agent.providers import PermanentAgentError
 from northdesk.domain.models import Ticket
-from northdesk.domain.payloads import MAX_TOOL_ARGUMENT_BYTES, json_fits, text_fits
+from northdesk.domain.payloads import (
+    MAX_TOOL_ARGUMENT_BYTES,
+    has_control_characters,
+    json_fits,
+    text_fits,
+)
 from northdesk.services.catalog import Catalog
 
 
@@ -52,6 +57,6 @@ def execute_tool(catalog: Catalog, ticket: Ticket, name: str, arguments: str) ->
         return catalog.get_invoices(ticket.customer_id)
     if name == "search_kb" and set(params) == {"query"}:
         query = params["query"]
-        if isinstance(query, str) and 0 < len(query) <= 1000:
+        if isinstance(query, str) and 0 < len(query) <= 1000 and not has_control_characters(query):
             return catalog.search_kb(query)
     raise PermanentAgentError("unknown_tool_or_invalid_arguments")

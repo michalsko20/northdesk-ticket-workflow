@@ -6,6 +6,18 @@ x-app: &app
     context: .
     target: runtime
   init: true
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+  read_only: true
+  tmpfs:
+    - /tmp:size=64m,mode=0700
+  deploy:
+    resources:
+      limits:
+        cpus: "2.0"
+        memory: 512M
   environment: &env
     TEMPORAL_ADDRESS: temporal:7233
     TEMPORAL_NAMESPACE: default
@@ -37,8 +49,15 @@ services:
     ports:
       - "127.0.0.1:7233:7233"
       - "127.0.0.1:8233:8233"
+    security_opt:
+      - no-new-privileges:true
     volumes:
       - temporal-data:/home/temporal
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 512M
     healthcheck:
       test: ["CMD", "temporal", "operator", "cluster", "health", "--address", "127.0.0.1:7233"]
       interval: 3s
@@ -60,6 +79,8 @@ services:
     command: ["python", "-m", "northdesk.worker"]
     volumes:
       - helpdesk-data:/state
+    tmpfs:
+      - /tmp:size=64m,mode=0700
     stop_grace_period: 30s
 
   tests:
@@ -69,6 +90,13 @@ services:
       context: .
       target: tests
     network_mode: none
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp:size=256m,mode=0700
     environment:
       LLM_MODE: fake
       HELPDESK_FAILURE_RATE: "0"
