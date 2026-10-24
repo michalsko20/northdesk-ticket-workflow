@@ -106,21 +106,24 @@ async def phase(client, label, count, concurrency, suffix, *, duplicate=False, u
         for ticket_id, state in completed.items()
     )
     expected_starts = 1 if duplicate else count
-    success = (
+    eventual_completion = (
         not failures
         and not pending
         and correct
         and duplicate_flags["False"] == expected_starts
         and duplicate_flags["True"] == count - expected_starts
     )
+    no_unexpected_http_errors = not failures and not unexpected_query_errors
+    success = eventual_completion and no_unexpected_http_errors
     return {
         "label": label,
         "requests": count,
         "concurrency": concurrency,
         "unique_tickets": len(expected),
         "success": success,
+        "eventual_completion": eventual_completion,
         "all_http_operations_succeeded": not failures and not query_errors and not statuses["503"],
-        "no_unexpected_http_errors": not failures and not unexpected_query_errors,
+        "no_unexpected_http_errors": no_unexpected_http_errors,
         "latency_definition": "Logical submission including admission retries",
         "submission_seconds": round(submission_seconds, 3),
         "submission_requests_per_second": round(count / submission_seconds, 2),
@@ -140,7 +143,9 @@ async def run(args):
     suffix = str(time.time_ns())[-12:]
     health = []
     stop = asyncio.Event()
-    limits = httpx.Limits(max_connections=256, max_keepalive_connections=128)
+    # Uvicorn closes idle connections after 5 s. Retire this client's pool
+    # earlier so it does not reuse a socket at the server's idle deadline.
+    limits = httpx.Limits(max_connections=256, max_keepalive_connections=128, keepalive_expiry=2)
     async with (
         httpx.AsyncClient(base_url=args.base_url, timeout=15, limits=limits) as client,
         httpx.AsyncClient(base_url=args.base_url, timeout=5) as health_client,
@@ -181,8 +186,10 @@ async def run(args):
         finally:
             stop.set()
             await monitor
-    success = all(item["success"] for item in phases) and all(
-        item["status"] == 200 for item in health
+    success = (
+        bool(health)
+        and all(item["success"] for item in phases)
+        and all(item["status"] == 200 for item in health)
     )
     result = {
         "profile": "isolated fake mode, one worker, activity concurrency 10",
@@ -193,7 +200,8 @@ async def run(args):
         and all(item["all_http_operations_succeeded"] for item in phases),
         "no_unexpected_http_errors": success
         and all(item["no_unexpected_http_errors"] for item in phases),
-        "success_definition": "Eventual correct completion; admission 503 is retried and reported",
+        "success_definition": "Eventual correct completion with no unexpected HTTP/transport "
+        "errors and healthy probes; explicit 503/Retry-After is retried and reported",
         "phases": phases,
         "health": {
             "samples": len(health),
