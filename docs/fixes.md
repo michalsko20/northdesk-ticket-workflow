@@ -1,5 +1,8 @@
 # Fix verification — 2026-10-24
 
+The [subsequent extensive review](extensive-review.md) adds further findings and
+updates the verification suite; the 271-test result below is this earlier fix pass.
+
 All eight confirmed findings from the adversarial review have regression tests
 and fixes. The earlier review documents are historical baselines.
 

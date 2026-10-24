@@ -2,7 +2,7 @@
 
 A small support backend using FastAPI, Temporal and an agent with read-only tools. Refunds are checked in code and wait for human approval. Workflow history survives worker restarts; fake Helpdesk effects survive retries and process restarts.
 
-[Polski szybki start](README.pl.md) · [Flowchart and design review](docs/architecture.md) · [Fix verification](docs/fixes.md)
+[Polski szybki start](README.pl.md) · [Flowchart and design review](docs/architecture.md) · [Fix verification](docs/fixes.md) · [Extensive review](docs/extensive-review.md)
 
 ## Run
 
@@ -83,6 +83,8 @@ Set `approved` to `false` to reject. Rejection or no response within 24 hours pr
 | 422 | Invalid request shape or field value |
 | 503 | Backend unavailable, or bounded admission/query capacity is busy |
 | 504 | Temporal operation exceeded its time budget |
+
+Ticket IDs in all three operations use 1–80 ASCII letters, digits, `_` or `-`; invalid routed IDs return 422 before Temporal dispatch.
 
 A capacity rejection includes `Retry-After: 1` and happens before that operation is dispatched. Respect it and reuse the ticket ID. The demo/load scripts implement bounded retries for these explicit admission rejections. A transport timeout on approval remains ambiguous: read status before deciding whether to retry.
 

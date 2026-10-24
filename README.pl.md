@@ -121,7 +121,8 @@ i potwierdzenia efektów.
 [Schemat SVG](docs/architecture.svg) · [Schemat PNG](docs/architecture.png) ·
 [Edytowalne źródło Mermaid](docs/architecture.mmd) ·
 [Ocena architektury ze źródłami](docs/architecture.md) ·
-[Naprawy i ich weryfikacja](docs/fixes.md).
+[Naprawy i ich weryfikacja](docs/fixes.md) ·
+[Dokładny code review i kolejne poprawki](docs/extensive-review.md).
 
 Wdrożenie produkcyjne pozostaje osobnym zadaniem: potrzebuje m.in. uwierzytelnienia,
 prawdziwego kontraktu idempotencji Helpdesku, wspólnej bazy i kontroli sumy refundów

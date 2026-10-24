@@ -1,0 +1,108 @@
+{
+  "baseline_commit": "d39a8253c72fa24f4dd48a55aa5d3e52145835a6",
+  "isolation": "temporary source checkout; existing locked Python environment; synthetic credentials; mocked provider transports",
+  "tests": [
+    {
+      "test": "test_provider_details_do_not_enter_traceback_logs_or_temporal_failure[connect-openai]",
+      "failed": true,
+      "errored": false
+    },
+    {
+      "test": "test_provider_details_do_not_enter_traceback_logs_or_temporal_failure[connect-glm]",
+      "failed": false,
+      "errored": false
+    },
+    {
+      "test": "test_provider_details_do_not_enter_traceback_logs_or_temporal_failure[timeout-openai]",
+      "failed": true,
+      "errored": false
+    },
+    {
+      "test": "test_provider_details_do_not_enter_traceback_logs_or_temporal_failure[timeout-glm]",
+      "failed": false,
+      "errored": false
+    },
+    {
+      "test": "test_provider_details_do_not_enter_traceback_logs_or_temporal_failure[backoff-openai]",
+      "failed": true,
+      "errored": false
+    },
+    {
+      "test": "test_provider_details_do_not_enter_traceback_logs_or_temporal_failure[backoff-glm]",
+      "failed": true,
+      "errored": false
+    },
+    {
+      "test": "test_provider_details_do_not_enter_traceback_logs_or_temporal_failure[unauthorized-openai]",
+      "failed": false,
+      "errored": false
+    },
+    {
+      "test": "test_provider_details_do_not_enter_traceback_logs_or_temporal_failure[unauthorized-glm]",
+      "failed": false,
+      "errored": false
+    },
+    {
+      "test": "test_startup_validation_does_not_print_other_provider_credential[openai-openai_api_key-zai_api_key]",
+      "failed": true,
+      "errored": false
+    },
+    {
+      "test": "test_startup_validation_does_not_print_other_provider_credential[glm-zai_api_key-openai_api_key]",
+      "failed": true,
+      "errored": false
+    },
+    {
+      "test": "test_invalid_path_id_is_rejected_before_backend_dispatch[read-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]",
+      "failed": true,
+      "errored": false
+    },
+    {
+      "test": "test_invalid_path_id_is_rejected_before_backend_dispatch[read-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]",
+      "failed": true,
+      "errored": false
+    },
+    {
+      "test": "test_invalid_path_id_is_rejected_before_backend_dispatch[read-white%20space]",
+      "failed": true,
+      "errored": false
+    },
+    {
+      "test": "test_invalid_path_id_is_rejected_before_backend_dispatch[read-bad%0Aline]",
+      "failed": true,
+      "errored": false
+    },
+    {
+      "test": "test_invalid_path_id_is_rejected_before_backend_dispatch[read-za\\u017c\\xf3\\u0142\\u0107]",
+      "failed": true,
+      "errored": false
+    },
+    {
+      "test": "test_invalid_path_id_is_rejected_before_backend_dispatch[approval-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]",
+      "failed": true,
+      "errored": false
+    },
+    {
+      "test": "test_invalid_path_id_is_rejected_before_backend_dispatch[approval-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]",
+      "failed": true,
+      "errored": false
+    },
+    {
+      "test": "test_invalid_path_id_is_rejected_before_backend_dispatch[approval-white%20space]",
+      "failed": true,
+      "errored": false
+    },
+    {
+      "test": "test_invalid_path_id_is_rejected_before_backend_dispatch[approval-bad%0Aline]",
+      "failed": true,
+      "errored": false
+    },
+    {
+      "test": "test_invalid_path_id_is_rejected_before_backend_dispatch[approval-za\\u017c\\xf3\\u0142\\u0107]",
+      "failed": true,
+      "errored": false
+    }
+  ],
+  "failed": 16,
+  "passed": 4
+}

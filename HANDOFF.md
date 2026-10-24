@@ -9,7 +9,7 @@ Original baseline verified on 2026-10-23; fixes verified on 2026-10-24. This doc
 - Current branch: `test/adversarial-inputs`. Fixes and evidence are committed locally; not pushed. Core fix `2b21fa5`, repeatable verification scripts `aeddeb6`. The main-branch CI below is historical.
 - Latest verified implementation/documentation commit before this handoff: `563565c`.
 - CI for that commit: [successful run](https://github.com/michalsko20/northdesk-ticket-workflow/actions/runs/39973655003).
-- Final verified suite: **86 tests**, Ruff lint, Ruff format check and mypy. Tests ran in a container with external networking disabled; CI also passed on AMD64.
+- Historical main-branch suite: **86 tests**, Ruff lint, Ruff format check and mypy. Tests ran in a container with external networking disabled; CI also passed on AMD64.
 - All seven example tickets were exercised through the running HTTP API with fake mode and the live GLM profile. Worker restart, Temporal restart, duplicate requests and persistent action receipts were checked.
 - At handoff, the API, Temporal and worker containers are running locally. The worker uses `LLM_MODE=glm`, model `glm-5.3-flash`. A fresh checkout defaults to keyless fake mode.
 
@@ -28,6 +28,35 @@ No implementation work is currently blocked or required to complete the agreed b
 - `make test` is the offline container gate. Load test scripts write ignored `artifacts/` by default; committed baseline reports must not be overwritten.
 - Main API/worker upgraded with the existing GLM profile preserved; seven new live examples and their receipts verified. Health endpoints return 200.
 - Extra `northdesk-limits` stack uses ports 8002/7235/8235 and separate volumes; is now stopped with volumes preserved. Main stack remains running on 8000/7233/8233.
+
+## Subsequent extensive review (2026-10-24)
+
+- Review baseline `d39a825`; see [detailed findings and evidence](docs/extensive-review.md).
+- Provider exception context and startup-validation inputs now avoid leaking synthetic private markers into formatted errors; provider failure serialization is explicitly tested.
+- Early overload rejection leaves connection lifecycle to Uvicorn, avoiding TCP reset during legal streamed uploads. Two actual socket tests complement ASGI tests.
+- Read/approval path IDs now share the creation ID contract, rejecting invalid IDs before backend dispatch.
+- Load success/CLI exit now require zero unexpected errors; eventual completion is recorded separately. A failed run is retained. The probe expires idle client sockets at 2 s, below the server default of 5 s.
+- Container suite: 302 passed, 3 opt-in timeout tests skipped. Current changes do not alter workflow command order, policy, action keys, persistence schema or frozen histories.
+
+## Resume here — extensive review handoff
+
+- Core review fixes committed: `e7df875`. Strict load gate/client idle-pool margin: `7a62566`. Documentation/evidence is saved in the next handoff commit. No push was performed.
+- Full final container result: **302 passed, 3 skipped in 46.51 s**; Ruff lint/format and mypy passed. See `docs/extensive-artifacts/checks.json`.
+- Five review findings addressed: streamed-overload TCP reset, provider exception-chain details, startup validation exposing raw credential input, load-test false-green exit, and missing path-ID validation.
+- Regression proof against `d39a825`: 16 failures and 4 passing controls in privacy/config/path tests; two actual Uvicorn socket tests additionally fail with ReadError on the baseline and pass with current code.
+- A high-load run failed with one POST RemoteProtocolError; **preserve** `docs/extensive-artifacts/load-before-idle-pool-margin.json`. Idle-connection expiry race is plausible, not proven. HTTPX probe pool expiry was changed from 5 s to 2 s, below the server's 5 s keep-alive.
+- Two subsequent 500-ticket/concurrency-200 rounds passed with zero unexpected HTTP/transport errors; both also exercised 1,000 duplicate submissions and 30 maximum-Unicode tickets. Explicit 503 shedding remains recorded and expected. New action-row counts have not been independently audited.
+- Main API/worker runs the final code with the original GLM profile preserved. All health endpoints return 200; seven retained GLM examples still return the original receipts. No new paid model calls were made during this review. See `runtime.json`.
+- Additional fake limits stack is stopped with volumes preserved. Main stack remains running. Credentials stay outside Git; never dump complete container environments.
+
+### Next reviewer / unfinished verification
+
+1. Read [extensive review](docs/extensive-review.md), including the failed run, scope boundaries and source cross-checks.
+2. Review `git diff d39a825..HEAD -- src tests scripts`; run `make test` if making changes.
+3. Optionally audit SQLite/history effects for the two new load reports. Prior 531-effect audit remains evidence only for the preceding run.
+4. Investigate the isolated protocol error further if claiming its root cause. Two passing samples after changing pool expiry do not prove causation.
+5. AMD64 CI, live OpenAI and a second independent review have not been run for these changes. Three slow timeout tests were not repeated because their code did not change.
+6. The previous 20 browser screenshots and live GLM run are historical; do not describe them as rerun during this pass.
 
 ## Working agreement
 

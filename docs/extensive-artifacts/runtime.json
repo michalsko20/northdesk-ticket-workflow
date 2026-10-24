@@ -1,0 +1,63 @@
+{
+  "base_url": "http://localhost:8000",
+  "new_paid_model_requests": 0,
+  "health": {
+    "live": {
+      "status": 200,
+      "body": {
+        "status": "ok"
+      }
+    },
+    "ready": {
+      "status": 200,
+      "body": {
+        "status": "ready"
+      }
+    },
+    "worker": {
+      "status": 200,
+      "body": {
+        "status": "polling",
+        "workflow_pollers": 2,
+        "activity_pollers": 2
+      }
+    }
+  },
+  "retained_ticket_reads": [
+    {
+      "ticket_id": "T-1-fixed-20261024",
+      "status": 200,
+      "same_receipt": true
+    },
+    {
+      "ticket_id": "T-2-fixed-20261024",
+      "status": 200,
+      "same_receipt": true
+    },
+    {
+      "ticket_id": "T-3-fixed-20261024",
+      "status": 200,
+      "same_receipt": true
+    },
+    {
+      "ticket_id": "T-4-fixed-20261024",
+      "status": 200,
+      "same_receipt": true
+    },
+    {
+      "ticket_id": "T-5-fixed-20261024",
+      "status": 200,
+      "same_receipt": true
+    },
+    {
+      "ticket_id": "T-6-fixed-20261024",
+      "status": 200,
+      "same_receipt": true
+    },
+    {
+      "ticket_id": "T-7-fixed-20261024",
+      "status": 200,
+      "same_receipt": true
+    }
+  ]
+}
