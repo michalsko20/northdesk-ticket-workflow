@@ -84,6 +84,7 @@ async def run(args):
                         TicketWorkflow.status, rpc_timeout=timedelta(seconds=3)
                     )
                     result["query_step"] = state.step
+                    result["action"] = (state.result or {}).get("action")
                     result["serialized_state_bytes"] = await encoded_bytes(state)
                 except Exception as exc:
                     result["query_error"] = type(exc).__name__
@@ -123,9 +124,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--temporal-address", default="localhost:7235")
     parser.add_argument("--sizes", type=int, nargs="+", default=[100000, 800000, 2200000])
-    parser.add_argument(
-        "--output", type=Path, default=Path("docs/review-artifacts/limits/payloads.json")
-    )
+    parser.add_argument("--output", type=Path, default=Path("artifacts/payloads.json"))
     args = parser.parse_args()
     if any(not 1 <= size <= 3000000 for size in args.sizes):
         parser.error("Sizes must be between 1 and 3000000 characters")

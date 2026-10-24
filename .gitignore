@@ -11,3 +11,4 @@ htmlcov/
 *.db-*
 .tools/
 .DS_Store
+artifacts/

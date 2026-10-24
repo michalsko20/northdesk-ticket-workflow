@@ -56,7 +56,5 @@ async def run(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base-url", default="http://127.0.0.1:8002")
-    parser.add_argument(
-        "--output", type=Path, default=Path("docs/review-artifacts/limits/requests.json")
-    )
+    parser.add_argument("--output", type=Path, default=Path("artifacts/requests.json"))
     asyncio.run(run(parser.parse_args()))

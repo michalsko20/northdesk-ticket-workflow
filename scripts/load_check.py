@@ -45,8 +45,15 @@ async def phase(client, label, count, concurrency, suffix, *, duplicate=False, u
         async with semaphore:
             started = time.perf_counter()
             try:
-                response = await client.post("/tickets", json=payload)
-                statuses[str(response.status_code)] += 1
+                for _attempt in range(8):
+                    response = await client.post("/tickets", json=payload)
+                    statuses[str(response.status_code)] += 1
+                    if response.status_code != 503 or "retry-after" not in response.headers:
+                        break
+                    # Admission rejects before dispatch. Reusing the ID also
+                    # makes a transport-ambiguous start safe to repeat.
+                    delay = min(5, max(0.1, float(response.headers["retry-after"])))
+                    await asyncio.sleep(delay + (index % 7) * 0.01)
                 if response.status_code == 202:
                     duplicate_flags[str(response.json()["duplicate"])] += 1
                 else:
@@ -62,6 +69,7 @@ async def phase(client, label, count, concurrency, suffix, *, duplicate=False, u
     pending = set(expected)
     completed = {}
     query_errors = Counter()
+    unexpected_query_errors = Counter()
     deadline = time.monotonic() + 90
 
     async def read(ticket_id):
@@ -70,6 +78,12 @@ async def phase(client, label, count, concurrency, suffix, *, duplicate=False, u
                 response = await client.get(f"/tickets/{ticket_id}")
                 if response.status_code != 200:
                     query_errors[str(response.status_code)] += 1
+                    if response.status_code == 503 and "retry-after" in response.headers:
+                        await asyncio.sleep(
+                            min(5, max(0.1, float(response.headers["retry-after"])))
+                        )
+                    else:
+                        unexpected_query_errors[str(response.status_code)] += 1
                     return
                 state = response.json()
                 if state["step"] in ("completed", "failed"):
@@ -81,6 +95,7 @@ async def phase(client, label, count, concurrency, suffix, *, duplicate=False, u
                     pending.discard(ticket_id)
             except httpx.HTTPError as exc:
                 query_errors[type(exc).__name__] += 1
+                unexpected_query_errors[type(exc).__name__] += 1
 
     while pending and time.monotonic() < deadline:
         await asyncio.gather(*(read(ticket_id) for ticket_id in list(pending)))
@@ -104,7 +119,9 @@ async def phase(client, label, count, concurrency, suffix, *, duplicate=False, u
         "concurrency": concurrency,
         "unique_tickets": len(expected),
         "success": success,
-        "all_http_operations_succeeded": not failures and not query_errors,
+        "all_http_operations_succeeded": not failures and not query_errors and not statuses["503"],
+        "no_unexpected_http_errors": not failures and not unexpected_query_errors,
+        "latency_definition": "Logical submission including admission retries",
         "submission_seconds": round(submission_seconds, 3),
         "submission_requests_per_second": round(count / submission_seconds, 2),
         "settled_seconds": round(time.perf_counter() - started, 3),
@@ -112,6 +129,7 @@ async def phase(client, label, count, concurrency, suffix, *, duplicate=False, u
         "http_statuses": dict(statuses),
         "duplicate_flags": dict(duplicate_flags),
         "query_errors": dict(query_errors),
+        "unexpected_query_errors": dict(unexpected_query_errors),
         "failures": failures,
         "pending": sorted(pending),
         "completed": completed,
@@ -172,7 +190,10 @@ async def run(args):
         "suffix": suffix,
         "success": success,
         "all_http_operations_succeeded": success
-        and all(not item["query_errors"] for item in phases),
+        and all(item["all_http_operations_succeeded"] for item in phases),
+        "no_unexpected_http_errors": success
+        and all(item["no_unexpected_http_errors"] for item in phases),
+        "success_definition": "Eventual correct completion; admission 503 is retried and reported",
         "phases": phases,
         "health": {
             "samples": len(health),
@@ -192,9 +213,7 @@ if __name__ == "__main__":
     parser.add_argument("--tickets", type=int, default=150)
     parser.add_argument("--burst", type=int, default=400)
     parser.add_argument("--concurrency", type=int, nargs="+", default=[1, 10, 50, 100])
-    parser.add_argument(
-        "--output", type=Path, default=Path("docs/review-artifacts/limits/load.json")
-    )
+    parser.add_argument("--output", type=Path, default=Path("artifacts/load.json"))
     args = parser.parse_args()
     if not 1 <= args.tickets <= 500 or not 1 <= args.burst <= 1000:
         parser.error("Use 1–500 tickets per phase and 1–1000 duplicate requests")
