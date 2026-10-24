@@ -1,4 +1,4 @@
-"""Known HTTP input failures; --runxfail makes the reproductions fail visibly."""
+"""HTTP input regressions: rejected data must not mutate Temporal state."""
 
 import json
 from unittest.mock import AsyncMock
@@ -24,7 +24,6 @@ async def input_api():
 TICKET = {"ticket_id": "break-input", "customer_id": "C-100", "subject": "Test", "body": "Test"}
 
 
-@pytest.mark.xfail(strict=True, reason="F1: validation errors cannot serialize lone surrogates")
 @pytest.mark.parametrize("field", ["ticket_id", "subject", "body", "unexpected"])
 async def test_lone_surrogate_is_a_client_error(input_api, field):
     api, temporal = input_api
@@ -37,7 +36,6 @@ async def test_lone_surrogate_is_a_client_error(input_api, field):
     assert response.status_code == 422, response.text
 
 
-@pytest.mark.xfail(strict=True, reason="F1: validation errors cannot serialize nonfinite floats")
 @pytest.mark.parametrize("number", ["NaN", "Infinity", "1e400"])
 async def test_nonfinite_number_is_a_client_error(input_api, number):
     api, temporal = input_api
@@ -50,7 +48,6 @@ async def test_nonfinite_number_is_a_client_error(input_api, number):
     assert response.status_code == 422, response.text
 
 
-@pytest.mark.xfail(strict=True, reason="F2: error encoder recurses through rejected JSON")
 async def test_deeply_nested_json_is_a_client_error(input_api):
     api, temporal = input_api
     # About 2.2 KB: this is a recursion-boundary probe, not a large-body load test.

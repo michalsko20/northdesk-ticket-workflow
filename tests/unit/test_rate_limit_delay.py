@@ -14,11 +14,6 @@ from northdesk.services.catalog import Catalog
 from northdesk.services.helpdesk import FakeHelpdesk
 
 
-@pytest.mark.xfail(
-    strict=True,
-    raises=AssertionError,
-    reason="F8: provider Retry-After is lost before the Temporal retry",
-)
 @pytest.mark.parametrize("mode", ["openai", "glm"])
 async def test_provider_retry_after_reaches_temporal_activity_error(tmp_path, mode):
     calls = []

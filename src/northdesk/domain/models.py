@@ -38,6 +38,7 @@ class TicketState:
     approval_deadline: str | None = None
     result: dict | None = None
     error: str | None = None
+    payload_warning: str | None = None
 
 
 @dataclass(frozen=True)

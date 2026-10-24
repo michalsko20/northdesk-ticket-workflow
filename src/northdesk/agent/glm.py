@@ -1,6 +1,5 @@
 """Z.ai Chat Completions adapter for the shared agent loop."""
 
-import json
 from typing import Any, cast
 
 from northdesk.agent.providers import (
@@ -12,6 +11,8 @@ from northdesk.agent.providers import (
     TransientAgentError,
     Turn,
     decision_schema,
+    decode_decision_json,
+    provider_retry_delay,
 )
 
 
@@ -87,8 +88,10 @@ class GLMProvider(OpenAIProvider):
         except APIConnectionError:
             raise TransientAgentError("glm_connection_error") from None
         except APIStatusError as exc:
-            if exc.status_code in (408, 429) or exc.status_code >= 500:
-                raise TransientAgentError(f"glm_http_{exc.status_code}") from None
+            if exc.status_code in (408, 409, 429) or exc.status_code >= 500:
+                raise TransientAgentError(
+                    f"glm_http_{exc.status_code}", provider_retry_delay(exc.response.headers)
+                ) from None
             raise PermanentAgentError(f"glm_http_{exc.status_code}") from None
         if not response.choices:
             raise MalformedResponse("glm_empty_response")
@@ -106,13 +109,7 @@ class GLMProvider(OpenAIProvider):
         if final_calls:
             if len(calls) != 1:
                 raise MalformedResponse("glm_mixed_decision_and_tools")
-            try:
-                return Turn(decision=json.loads(final_calls[0].arguments), output=output)
-            except json.JSONDecodeError:
-                raise MalformedResponse("glm_unreadable_decision") from None
+            return Turn(decision=decode_decision_json(final_calls[0].arguments), output=output)
         if calls:
             return Turn(calls=calls, output=output)
-        try:
-            return Turn(decision=json.loads(choice.message.content or ""), output=output)
-        except json.JSONDecodeError:
-            raise MalformedResponse("glm_unreadable_decision") from None
+        return Turn(decision=decode_decision_json(choice.message.content or ""), output=output)

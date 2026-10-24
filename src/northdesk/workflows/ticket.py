@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from temporalio import workflow
 from temporalio.common import RetryPolicy
 from temporalio.exceptions import ActivityError
+from temporalio.exceptions import TimeoutError as ActivityTimeoutError
 
 from northdesk.domain.models import (
     ActionInput,
@@ -13,6 +14,21 @@ from northdesk.domain.models import (
     ValidationInput,
     escalation,
 )
+from northdesk.domain.payloads import bounded_state, text_fits
+
+
+def failure_kind(cause: BaseException | None) -> str:
+    if isinstance(cause, ActivityTimeoutError):
+        return f"TimeoutError:{cause.type.name if cause.type else 'UNKNOWN'}"
+    kind = getattr(cause, "type", None)
+    return kind if isinstance(kind, str) and kind and text_fits(kind, 100) else type(cause).__name__
+
+
+def activity_failure_kind(cause: BaseException | None) -> str:
+    if workflow.patched("readable-activity-errors-v1"):
+        return failure_kind(cause)
+    return str(getattr(cause, "type", type(cause).__name__))
+
 
 LLM_RETRY = RetryPolicy(
     initial_interval=timedelta(seconds=1), maximum_interval=timedelta(seconds=5), maximum_attempts=3
@@ -41,7 +57,7 @@ class TicketWorkflow:
 
     @workflow.query
     def status(self) -> TicketState:
-        return self.state
+        return bounded_state(self.state)
 
     @workflow.update
     def approve(self, approval: Approval) -> Approval:
@@ -92,7 +108,7 @@ class TicketWorkflow:
                 retry_policy=LLM_RETRY,
             )
         except ActivityError as exc:
-            reason = getattr(exc.cause, "type", type(exc.cause).__name__)
+            reason = activity_failure_kind(exc.cause)
             decision = escalation(f"decision_failed:{reason}")
         self.state.decision = decision
 
@@ -122,9 +138,11 @@ class TicketWorkflow:
                 retry_policy=ACTION_RETRY,
             )
         except ActivityError as exc:
-            reason = getattr(exc.cause, "type", type(exc.cause).__name__)
+            reason = activity_failure_kind(exc.cause)
             self.state.error = f"action_failed:{reason}"
             self.transition("failed")
         else:
             self.transition("completed")
+        if workflow.patched("bounded-ticket-state-v1"):
+            return bounded_state(self.state)
         return self.state

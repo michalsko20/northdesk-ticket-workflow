@@ -106,9 +106,6 @@ FakeHelpdesk(sys.argv[1], after_commit=lambda: os._exit(73)).execute(action)
     assert count(path) == 1
 
 
-@pytest.mark.xfail(
-    strict=True, reason="F4: SQLite connections are left open until garbage collection"
-)
 def test_database_connections_are_closed_on_success_duplicate_and_failure(tmp_path, monkeypatch):
     opened = []
 

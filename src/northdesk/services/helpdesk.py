@@ -5,6 +5,7 @@ import json
 import random
 import sqlite3
 from collections.abc import Callable
+from contextlib import closing
 from dataclasses import asdict
 from pathlib import Path
 
@@ -34,7 +35,7 @@ class FakeHelpdesk:
         self.random_value = random_value
         self.after_commit = after_commit
         Path(path).parent.mkdir(parents=True, exist_ok=True)
-        with self._connect() as db:
+        with closing(self._connect()) as db, db:
             db.execute("""CREATE TABLE IF NOT EXISTS actions (
                 idempotency_key TEXT PRIMARY KEY,
                 fingerprint TEXT NOT NULL,
@@ -47,7 +48,7 @@ class FakeHelpdesk:
     def execute(self, request: ActionInput) -> dict:
         payload = json.dumps(asdict(request), sort_keys=True, separators=(",", ":"))
         fingerprint = hashlib.sha256(payload.encode()).hexdigest()
-        with self._connect() as db:
+        with closing(self._connect()) as db, db:
             # Serialize concurrent callers so receipt and fake effect are atomic.
             db.execute("BEGIN IMMEDIATE")
             previous = db.execute(

@@ -18,10 +18,6 @@ from northdesk.services.catalog import Catalog
 from northdesk.services.helpdesk import FakeHelpdesk
 from northdesk.workflows.ticket import TicketWorkflow
 
-UNREADABLE = pytest.mark.xfail(
-    strict=True, raises=AssertionError, reason="F3: model proposal poisons the status response"
-)
-
 
 @pytest.fixture
 async def glm_for_proposal(proposal):
@@ -69,19 +65,16 @@ async def glm_for_proposal(proposal):
     "proposal",
     [
         {"unexpected": float("nan")},
-        pytest.param({"unexpected": "\ud800"}, marks=UNREADABLE),
-        pytest.param(
-            {
-                "category": "account",
-                "priority": "normal",
-                "action": "reply",
-                "message": "\ud800",
-                "articles": ["KB-1"],
-            },
-            marks=UNREADABLE,
-        ),
+        {"unexpected": "\ud800"},
+        {
+            "category": "account",
+            "priority": "normal",
+            "action": "reply",
+            "message": "\ud800",
+            "articles": ["KB-1"],
+        },
     ],
-    ids=["rejected-nan", "rejected-surrogate", "accepted-surrogate-reply"],
+    ids=["rejected-nan", "rejected-surrogate", "rejected-surrogate-reply"],
 )
 async def test_model_output_keeps_completed_ticket_readable(
     temporal_env, tmp_path, proposal, glm_for_proposal
@@ -105,8 +98,7 @@ async def test_model_output_keeps_completed_ticket_readable(
         state = await asyncio.wait_for(handle.result(), timeout=20)
         assert state.step == "completed"
         assert state.result is not None
-        if "unexpected" in proposal:
-            assert state.decision.action == "escalate"
+        assert state.decision.action == "escalate"
         async with httpx.AsyncClient(
             transport=httpx.ASGITransport(
                 app=create_app(client=temporal_env.client), raise_app_exceptions=False

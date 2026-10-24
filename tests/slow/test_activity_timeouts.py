@@ -68,8 +68,8 @@ async def test_real_timeout_exhaustion_terminates_safely(temporal_env, target, a
             if target == "act":
                 assert result.step == "failed"
                 assert result.result is None
-                assert result.error == "action_failed:TimeoutError"
+                assert result.error.startswith("action_failed:TimeoutError:")
             else:
                 assert result.step == "completed"
                 assert result.result["action"] == "escalate"
-                assert result.decision.reason == "decision_failed:TimeoutError"
+                assert result.decision.reason.startswith("decision_failed:TimeoutError:")

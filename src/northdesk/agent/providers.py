@@ -1,10 +1,15 @@
 """Provider adapters share a small tool-call/decision protocol."""
 
 import json
+import math
+from collections.abc import Mapping
 from dataclasses import asdict, dataclass, field
+from datetime import UTC, datetime, timedelta
+from email.utils import parsedate_to_datetime
 from typing import Any, Protocol, cast
 
 from northdesk.domain.models import Decision
+from northdesk.domain.payloads import MAX_PROPOSAL_BYTES, text_fits
 from northdesk.domain.rules import ACTIONS, CATEGORIES, PRIORITIES
 
 
@@ -17,7 +22,50 @@ class MalformedResponse(Exception):
 
 
 class TransientAgentError(Exception):
-    pass
+    def __init__(self, message: str, retry_after: timedelta | None = None) -> None:
+        super().__init__(message)
+        self.retry_after = retry_after
+
+
+def provider_retry_delay(
+    headers: Mapping[str, str], now: datetime | None = None
+) -> timedelta | None:
+    """Honor server pacing without scheduling a retry beyond the five-minute budget."""
+    headers = {key.lower(): value for key, value in headers.items()}
+    seconds: float | None = None
+    for header, divisor in (("retry-after-ms", 1000), ("retry-after", 1)):
+        value = headers.get(header)
+        if value is None:
+            continue
+        try:
+            seconds = float(value) / divisor
+        except ValueError:
+            if header == "retry-after":
+                try:
+                    date = parsedate_to_datetime(value)
+                    date = date.replace(tzinfo=UTC) if date.tzinfo is None else date
+                    seconds = (date - (now or datetime.now(UTC))).total_seconds()
+                except (ValueError, TypeError, OverflowError):
+                    pass
+        if seconds is not None and math.isfinite(seconds) and seconds > 0:
+            break
+        seconds = None
+    if seconds is None or not math.isfinite(seconds) or seconds <= 0:
+        return None
+    if seconds > 300:
+        raise PermanentAgentError("provider_backoff_exceeds_activity_budget")
+    return timedelta(seconds=seconds)
+
+
+def decode_decision_json(text: object) -> object:
+    if not isinstance(text, str):
+        raise MalformedResponse("llm_unreadable_decision")
+    if not text_fits(text, MAX_PROPOSAL_BYTES):
+        raise PermanentAgentError("invalid_proposal_encoding_or_size")
+    try:
+        return json.loads(text)
+    except (ValueError, RecursionError):
+        raise MalformedResponse("llm_unreadable_decision") from None
 
 
 @dataclass
@@ -101,9 +149,11 @@ class OpenAIProvider:
         except APIConnectionError as exc:
             raise TransientAgentError("llm_connection_error") from exc
         except APIStatusError as exc:
-            if exc.status_code in (408, 429) or exc.status_code >= 500:
-                raise TransientAgentError(f"llm_http_{exc.status_code}") from exc
-            raise PermanentAgentError(f"llm_http_{exc.status_code}") from exc
+            if exc.status_code in (408, 409, 429) or exc.status_code >= 500:
+                raise TransientAgentError(
+                    f"llm_http_{exc.status_code}", provider_retry_delay(exc.response.headers)
+                ) from None
+            raise PermanentAgentError(f"llm_http_{exc.status_code}") from None
         if response.status != "completed":
             raise MalformedResponse("llm_incomplete_response")
         output = [item.model_dump(exclude_none=True) for item in response.output]
@@ -114,10 +164,7 @@ class OpenAIProvider:
         ]
         if calls:
             return Turn(calls=calls, output=output)
-        try:
-            return Turn(decision=json.loads(response.output_text), output=output)
-        except (json.JSONDecodeError, TypeError) as exc:
-            raise MalformedResponse("llm_unreadable_decision") from exc
+        return Turn(decision=decode_decision_json(response.output_text), output=output)
 
     async def close(self) -> None:
         await self.client.close()

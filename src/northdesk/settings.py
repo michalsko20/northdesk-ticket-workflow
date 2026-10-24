@@ -18,6 +18,14 @@ class Settings(BaseSettings):
     zai_api_key: SecretStr = SecretStr("")
     helpdesk_failure_rate: float = Field(default=0.2, ge=0, le=1)
     helpdesk_db_path: str = "helpdesk.db"
+    http_max_body_bytes: int = Field(default=256 * 1024, ge=256 * 1024, le=1024 * 1024)
+    http_max_inflight: int = Field(default=32, ge=1, le=256)
+    http_query_concurrency: int = Field(default=4, ge=1, le=32)
+    http_query_timeout_seconds: float = Field(default=1, gt=0, le=4)
+    http_body_timeout_seconds: float = Field(default=10, gt=0, le=60)
+    worker_activity_concurrency: int = Field(default=10, ge=1, le=100)
+    worker_workflow_concurrency: int = Field(default=16, ge=1, le=128)
+    worker_max_cached_workflows: int = Field(default=512, ge=0, le=4096)
 
     @model_validator(mode="after")
     def require_real_key(self) -> "Settings":

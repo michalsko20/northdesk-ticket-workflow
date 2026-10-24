@@ -8,6 +8,7 @@ from northdesk.agent.providers import PermanentAgentError
 from northdesk.agent.tools import execute_tool
 from northdesk.api import TicketRequest
 from northdesk.domain.models import ActionInput, Decision, Ticket, TicketState
+from northdesk.domain.payloads import MAX_STATE_BYTES, MAX_TEXT_BYTES, bounded_state
 from northdesk.domain.rules import validate_decision
 from northdesk.services.catalog import Catalog
 from northdesk.services.helpdesk import FakeHelpdesk
@@ -25,17 +26,7 @@ async def test_maximum_valid_ticket_fits_temporal_byte_limit():
 
 @pytest.mark.parametrize(
     "message_size",
-    [
-        100000,
-        pytest.param(
-            800000,
-            marks=pytest.mark.xfail(
-                strict=True,
-                raises=AssertionError,
-                reason="F6: repeated decision text exceeds final payload limit",
-            ),
-        ),
-    ],
+    [MAX_TEXT_BYTES, MAX_TEXT_BYTES + 1, 800000],
 )
 async def test_accepted_proposal_keeps_final_state_below_temporal_limit(tmp_path, message_size):
     ticket = Ticket("payload-limit", "C-200", "Password", "Forgot password")
@@ -43,7 +34,7 @@ async def test_accepted_proposal_keeps_final_state_below_temporal_limit(tmp_path
         Decision("account", "normal", "reply", message="x" * message_size, articles=["KB-1"])
     )
     decision = validate_decision(ticket, proposal, Catalog().invoices, {"KB-1"})
-    assert decision.action == "reply"
+    assert decision.action == ("reply" if message_size <= MAX_TEXT_BYTES else "escalate")
     result = FakeHelpdesk(str(tmp_path / "effects.db")).execute(
         ActionInput(ticket, decision, "ticket/payload-limit/action")
     )
@@ -55,16 +46,11 @@ async def test_accepted_proposal_keeps_final_state_below_temporal_limit(tmp_path
         decision=decision,
         result=result,
     )
-    payloads = await DataConverter.default.encode([state])
+    payloads = await DataConverter.default.encode([bounded_state(state)])
     size = sum(len(payload.data) for payload in payloads)
-    assert size < TEMPORAL_BLOB_LIMIT, size
+    assert size < MAX_STATE_BYTES, size
 
 
-@pytest.mark.xfail(
-    strict=True,
-    raises=(RecursionError, ValueError),
-    reason="F7: complex tool JSON escapes permanent argument error classification",
-)
 @pytest.mark.parametrize("kind", ["nesting", "integer-digits"])
 def test_parser_resource_limits_are_permanent_tool_errors(kind):
     if kind == "nesting":

@@ -11,11 +11,9 @@ from northdesk.domain.models import Decision, Ticket
 from northdesk.workflows.ticket import TicketWorkflow
 
 
-@pytest.mark.xfail(
-    strict=True, raises=AssertionError, reason="F5: SDK timeout type becomes numeric text"
-)
 @pytest.mark.parametrize("target", ["decide", "act"])
 async def test_timeout_failure_reason_is_readable(monkeypatch, target):
+    monkeypatch.setattr("northdesk.workflows.ticket.workflow.patched", lambda _: True)
     timeout = TemporalTimeoutError(
         "activity deadline exceeded", type=TimeoutType.START_TO_CLOSE, last_heartbeat_details=[]
     )

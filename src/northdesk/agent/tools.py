@@ -2,6 +2,7 @@ import json
 
 from northdesk.agent.providers import PermanentAgentError
 from northdesk.domain.models import Ticket
+from northdesk.domain.payloads import MAX_TOOL_ARGUMENT_BYTES, json_fits, text_fits
 from northdesk.services.catalog import Catalog
 
 
@@ -36,11 +37,13 @@ def tool_definitions() -> list[dict]:
 
 
 def execute_tool(catalog: Catalog, ticket: Ticket, name: str, arguments: str) -> object:
+    if not text_fits(arguments, MAX_TOOL_ARGUMENT_BYTES):
+        raise PermanentAgentError("invalid_tool_arguments")
     try:
         params = json.loads(arguments)
-    except json.JSONDecodeError as exc:
+    except (ValueError, RecursionError) as exc:
         raise PermanentAgentError("invalid_tool_arguments") from exc
-    if not isinstance(params, dict):
+    if not isinstance(params, dict) or not json_fits(params, MAX_TOOL_ARGUMENT_BYTES):
         raise PermanentAgentError("invalid_tool_arguments")
     # Customer scope comes from the ticket, never from LLM-controlled arguments.
     if name == "get_customer" and not params:
